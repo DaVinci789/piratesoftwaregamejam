@@ -1,0 +1,31 @@
+[gd_scene load_steps=3 format=3 uid="uid://di4uiqohlx2qw"]
+
+[ext_resource type="Script" path="res://character.gd" id="1_v5gdc"]
+[ext_resource type="Texture2D" uid="uid://dxwcjwjkl6dw8" path="res://icon.svg" id="2_mb7ur"]
+
+[node name="world" type="Node2D"]
+
+[node name="character" type="CharacterBody2D" parent="."]
+position = Vector2(574, 321)
+script = ExtResource("1_v5gdc")
+SPEED = null
+DASH_DURATION_SECONDS = null
+DASH_LENGTH = null
+
+[node name="Camera2D" type="Camera2D" parent="character"]
+zoom = Vector2(0.5, 0.5)
+
+[node name="Sprite2D2" type="Sprite2D" parent="character"]
+texture = ExtResource("2_mb7ur")
+
+[node name="Sprite2D" type="Sprite2D" parent="character"]
+texture = ExtResource("2_mb7ur")
+
+[node name="dash" type="Timer" parent="character"]
+one_shot = true
+
+[node name="Icon" type="Sprite2D" parent="."]
+position = Vector2(171, 175)
+texture = ExtResource("2_mb7ur")
+
+[connection signal="timeout" from="character/dash" to="character" method="_on_dash_timeout"]
