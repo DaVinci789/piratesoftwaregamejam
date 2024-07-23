@@ -1,0 +1,134 @@
+[gd_scene load_steps=8 format=3 uid="uid://di4uiqohlx2qw"]
+
+[ext_resource type="Script" path="res://camera.gd" id="1_6soux"]
+[ext_resource type="PackedScene" uid="uid://cdudyaojxmf5b" path="res://character.tscn" id="1_c4pgj"]
+[ext_resource type="Texture2D" uid="uid://dxwcjwjkl6dw8" path="res://icon.svg" id="2_mb7ur"]
+[ext_resource type="Script" path="res://Label.gd" id="3_25wlw"]
+[ext_resource type="Script" path="res://resources.gd" id="4_dx30y"]
+[ext_resource type="Script" path="res://areaswitch.gd" id="6_nqskp"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6ycyu"]
+size = Vector2(150, 339)
+
+[node name="world" type="Node2D"]
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_top = 743.0
+offset_right = 2072.0
+offset_bottom = 951.0
+color = Color(0, 0, 0, 1)
+
+[node name="character" parent="." node_paths=PackedStringArray("element_input_label") instance=ExtResource("1_c4pgj")]
+position = Vector2(542, 701.495)
+element_input_label = NodePath("../CanvasLayer/Label")
+
+[node name="Icon" type="Sprite2D" parent="."]
+position = Vector2(171, 543.495)
+rotation = 0.803569
+texture = ExtResource("2_mb7ur")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Label" type="Label" parent="CanvasLayer"]
+offset_left = 457.0
+offset_top = -7.0
+offset_right = 497.0
+offset_bottom = 16.0
+scale = Vector2(7.56, 8.2)
+script = ExtResource("3_25wlw")
+
+[node name="earth" type="Node2D" parent="CanvasLayer"]
+position = Vector2(96, 93)
+script = ExtResource("4_dx30y")
+current_value = 2
+meter_color = Color(0.51027, 0.73, 0.1022, 1)
+
+[node name="Label" type="Label" parent="CanvasLayer/earth"]
+offset_left = -8.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = -9.0
+scale = Vector2(2.09901, 2.68)
+text = "3"
+
+[node name="air" type="Node2D" parent="CanvasLayer"]
+position = Vector2(192, 218)
+script = ExtResource("4_dx30y")
+current_value = 4
+meter_color = Color(0.8827, 0.906815, 0.91, 1)
+
+[node name="Label2" type="Label" parent="CanvasLayer/air"]
+offset_left = -11.0
+offset_top = -32.0
+offset_right = 29.0
+offset_bottom = -9.0
+scale = Vector2(2.09901, 2.68)
+text = "1"
+
+[node name="fire" type="Node2D" parent="CanvasLayer"]
+position = Vector2(98, 329)
+script = ExtResource("4_dx30y")
+current_value = 1
+meter_color = Color(0.99, 0.1122, 0.0495, 1)
+
+[node name="Label3" type="Label" parent="CanvasLayer/fire"]
+offset_left = -10.0
+offset_top = -33.0
+offset_right = 30.0
+offset_bottom = -10.0
+scale = Vector2(2.09901, 2.68)
+text = "3"
+
+[node name="water" type="Node2D" parent="CanvasLayer"]
+position = Vector2(187, 458)
+script = ExtResource("4_dx30y")
+current_value = 3
+meter_color = Color(0.1092, 0.74984, 0.91, 1)
+
+[node name="Label4" type="Label" parent="CanvasLayer/water"]
+offset_left = -10.0
+offset_top = -33.0
+offset_right = 30.0
+offset_bottom = -10.0
+scale = Vector2(2.09901, 2.68)
+text = "2"
+
+[node name="projectiles" type="Node" parent="."]
+
+[node name="switch0" type="Polygon2D" parent="."]
+position = Vector2(1160, 632)
+polygon = PackedVector2Array(0, 0)
+
+[node name="switch1" type="Polygon2D" parent="."]
+position = Vector2(3093, 636)
+polygon = PackedVector2Array(-2, 16, -2, 1669)
+
+[node name="ColorRect" type="ColorRect" parent="switch1"]
+offset_left = -23.0
+offset_top = -2.0
+offset_right = 17.0
+offset_bottom = 1660.0
+
+[node name="areaswitch" type="Area2D" parent="."]
+position = Vector2(1995, 693)
+script = ExtResource("6_nqskp")
+scene_to = "switch1"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="areaswitch"]
+position = Vector2(65, 159.5)
+shape = SubResource("RectangleShape2D_6ycyu")
+
+[node name="camera" type="Camera2D" parent="." node_paths=PackedStringArray("polygon_restraint")]
+position = Vector2(1150, 636)
+zoom = Vector2(0.5, 0.5)
+script = ExtResource("1_6soux")
+polygon_restraint = NodePath("../switch0")
+
+[node name="ColorRect" type="ColorRect" parent="camera"]
+offset_left = -18.0
+offset_top = -21.0
+offset_right = 22.0
+offset_bottom = 19.0
+color = Color(1, 0.156863, 1, 1)
+
+[connection signal="body_entered" from="areaswitch" to="areaswitch" method="_on_body_entered"]

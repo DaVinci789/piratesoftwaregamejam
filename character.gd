@@ -1,14 +1,22 @@
 extends CharacterBody2D
 
 @export var SPEED := 700
+@export var CAMERA_INPUT_UPDATE := 0.1
 @export var DASH_DURATION_SECONDS := 0.2
 @export var DASH_LENGTH := 350
+@export var CAMERA_TRACKING_OFFSET := 200
 @export var ELEMENT_INPUT_TIMEOUT := 0.5 :
 	set(value):
-		$element_input_timeout.wait_time = value
+		if $element_input_timeout:
+			$element_input_timeout.wait_time = value
 
 @export var element_input_label: Label
+
 @onready var projectile_scene := preload("res://projectile.tscn")
+@onready var camera_target: Vector2:
+	get:
+		return $cameratarget.global_position
+var move_camera_target := true
 
 enum STATES {
 	Normal,
@@ -24,6 +32,8 @@ var current_target := Vector2.ZERO
 
 func _ready() -> void:
 	$element_input_timeout.wait_time = ELEMENT_INPUT_TIMEOUT
+	if element_input_label == null:
+		element_input_label = Label.new()
 
 func get_input() -> void:
 	var input_dir := Input.get_vector("move_left", "move_right", "move_up", "move_down")
@@ -38,10 +48,13 @@ func _physics_process(delta: float) -> void:
 		element_input_label.text += "3"
 	if Input.is_action_just_pressed("element_4"):
 		element_input_label.text += "4"
+	
+	if element_input_label.text.length() != 0 and $element_input_timeout.is_stopped():
+		$element_input_timeout.start()
+	
 	match state:
 		STATES.Normal:
 			get_input()
-			$Sprite2D2.position = Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized() * DASH_LENGTH
 			if Input.is_action_just_pressed("dash"):
 				state = STATES.Dash_Enter
 			
@@ -55,7 +68,7 @@ func _physics_process(delta: float) -> void:
 				else:
 					to_launch.look_at(get_global_mouse_position())
 				get_tree().root.add_child(to_launch)
-				
+			
 			move_and_collide(velocity * delta)
 			pass
 		STATES.Dash_Enter:
@@ -85,3 +98,24 @@ func special_activated() -> Array:
 func _on_dash_timeout() -> void:
 	state = STATES.Dash_Exit
 	pass # Replace with function body.
+
+func _on_cameratarget_update_timeout() -> void:
+	var input_vector := Input.get_vector("move_left", "move_right", "move_up", "move_down")
+	# Check if the input vector is not zero
+	if input_vector != Vector2.ZERO:
+		# Restrict movement to cardinal directions
+		var cardinal_vector := Vector2.ZERO
+		if abs(input_vector.x) > abs(input_vector.y):
+			# Horizontal movement (left or right)
+			cardinal_vector.x = sign(input_vector.x)
+		else:
+			# Vertical movement (up or down)
+			cardinal_vector.y = sign(input_vector.y)
+
+		# Update the camera target position
+		$cameratarget.position = cardinal_vector.normalized() * CAMERA_TRACKING_OFFSET
+	pass # Replace with function body.
+
+func _on_element_input_timeout_timeout() -> void:
+	if element_input_label.text != "Fireball!":
+		element_input_label.text = ""

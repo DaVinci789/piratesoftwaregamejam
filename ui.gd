@@ -1,0 +1,17 @@
+extends CanvasLayer
+
+func _ready() -> void:
+	Global.switch1_entered.connect(_on_switch1_entered)
+
+func _on_switch1_entered() -> void:
+	create_tween().tween_property($magic, "modulate", Color.WHITE, 0.2).set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_IN)
+
+func _process(_delta: float) -> void:
+	if $Label.text == "331":
+		if (Global.EarthWheel.elements_left > 0 and Global.FireWheel.elements_left > 0) or \
+		   (Global.EarthWheel.current_value > 0 and Global.FireWheel.current_value > 1):
+			$Label.text = "Fireball!"
+			Global.EarthWheel.current_value -= 1
+			Global.FireWheel.current_value -= 2
+		else:
+			$Label.text = "Not enough!"
