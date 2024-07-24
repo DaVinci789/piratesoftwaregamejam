@@ -1,0 +1,91 @@
+[gd_scene load_steps=10 format=3 uid="uid://cabod6cllbi2u"]
+
+[ext_resource type="Script" path="res://golem.gd" id="1_duijy"]
+[ext_resource type="Shader" path="res://flash.gdshader" id="2_8l2he"]
+[ext_resource type="Texture2D" uid="uid://dxwcjwjkl6dw8" path="res://icon.svg" id="2_w2lhu"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tcadh"]
+resource_local_to_scene = true
+shader = ExtResource("2_8l2he")
+shader_parameter/enable = false
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_76cot"]
+radius = 66.0
+height = 182.0
+
+[sub_resource type="Animation" id="Animation_gelho"]
+resource_name = "windup"
+length = 0.4
+step = 0.15
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:material:shader_parameter/enable")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [true, true, false]
+}
+
+[sub_resource type="Animation" id="Animation_0qu8x"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:material:shader_parameter/enable")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_i8gnq"]
+_data = {
+"RESET": SubResource("Animation_0qu8x"),
+"windup": SubResource("Animation_gelho")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e6c51"]
+size = Vector2(155, 195)
+
+[node name="golem" type="CharacterBody2D"]
+script = ExtResource("1_duijy")
+BASE_SPEED = 300
+HP = null
+DASH_LENGTH = 700
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_tcadh")
+scale = Vector2(1.09375, 1.41102)
+texture = ExtResource("2_w2lhu")
+
+[node name="collision" type="CollisionShape2D" parent="."]
+visible = false
+shape = SubResource("CapsuleShape2D_76cot")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_i8gnq")
+}
+
+[node name="projectile_hitbox" type="Area2D" parent="."]
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="projectile_hitbox"]
+position = Vector2(-0.5, 1.5)
+shape = SubResource("RectangleShape2D_e6c51")
+
+[node name="hp_label_temp" type="Label" parent="."]
+offset_left = -129.0
+offset_top = 62.0
+offset_right = -89.0
+offset_bottom = 85.0
+scale = Vector2(6.81513, 4.67175)
+
+[connection signal="body_entered" from="projectile_hitbox" to="." method="_on_projectile_hitbox_body_entered"]

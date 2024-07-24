@@ -2,7 +2,7 @@ extends Sprite2D
 
 @export var key_input_label: Label
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	$slot1.get_node('keys').modulate = Color.BLACK
 	$slot2.get_node('keys').modulate = Color.BLACK
 	$slot3.get_node('keys').modulate = Color.BLACK

@@ -9,6 +9,7 @@ extends CharacterBody2D
 	set(value):
 		if $element_input_timeout:
 			$element_input_timeout.wait_time = value
+@export var PUSH_STRENGTH := 70
 
 @export var element_input_label: Label
 
@@ -29,6 +30,8 @@ var state := STATES.Normal
 
 var dashing_target := Vector2.ZERO
 var current_target := Vector2.ZERO
+var dash_previous_position := Vector2.ZERO
+var dash_time_elapsed := 0.0
 
 func _ready() -> void:
 	$element_input_timeout.wait_time = ELEMENT_INPUT_TIMEOUT
@@ -69,11 +72,15 @@ func _physics_process(delta: float) -> void:
 					to_launch.look_at(get_global_mouse_position())
 				get_tree().root.add_child(to_launch)
 			
-			move_and_collide(velocity * delta)
+			var collision := move_and_collide(velocity * delta)
+			if collision:
+				handle_collision(collision)
 			pass
 		STATES.Dash_Enter:
 			var direction := Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized()
 			dashing_target = position + direction * DASH_LENGTH
+			dash_previous_position = position
+			dash_time_elapsed = 0.0
 			
 			var tween := create_tween()
 			current_target = position
@@ -82,8 +89,18 @@ func _physics_process(delta: float) -> void:
 			state = STATES.Dash
 			pass
 		STATES.Dash:
-			velocity = (current_target - position).normalized() * (DASH_LENGTH / DASH_DURATION_SECONDS) 
+			#velocity = (current_target - position).normalized() * (DASH_LENGTH / DASH_DURATION_SECONDS) 
+			#move_and_collide(velocity * delta)
+			dash_time_elapsed += delta
+			if dash_time_elapsed > DASH_DURATION_SECONDS:
+				dash_time_elapsed = DASH_DURATION_SECONDS  # Clamp to max duration
+			
+			# Calculate velocity based on the change in position
+			var new_position := dash_previous_position.lerp(current_target, dash_time_elapsed / DASH_DURATION_SECONDS)
+			velocity = (new_position - position) / delta
+			
 			move_and_collide(velocity * delta)
+			dash_previous_position = new_position
 			pass
 		STATES.Dash_Exit:
 			dashing_target = Vector2.ZERO
@@ -94,6 +111,11 @@ func special_activated() -> Array:
 	var mouse_special := Input.is_action_just_pressed("special")
 	var joystick_special := Input.get_vector("special_left", "special_right", "special_up", "special_down")
 	return [mouse_special || joystick_special != Vector2.ZERO, joystick_special]
+
+func handle_collision(collision: KinematicCollision2D) -> void:
+	var collider := collision.get_collider()
+	if collider:
+		collider.push(-collision.get_normal().normalized() * PUSH_STRENGTH)
 
 func _on_dash_timeout() -> void:
 	state = STATES.Dash_Exit
