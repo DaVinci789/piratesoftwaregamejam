@@ -1,25 +1,26 @@
-[gd_scene load_steps=4 format=3 uid="uid://cdudyaojxmf5b"]
+[gd_scene load_steps=5 format=3 uid="uid://cdudyaojxmf5b"]
 
 [ext_resource type="Script" path="res://character.gd" id="1_4yr1q"]
 [ext_resource type="Texture2D" uid="uid://dxwcjwjkl6dw8" path="res://icon.svg" id="2_hux8n"]
+[ext_resource type="Material" uid="uid://6rno7n4h3tmh" path="res://pixelscaling.tres" id="2_pha7q"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8ggmo"]
 size = Vector2(126, 126)
 
 [node name="character" type="CharacterBody2D"]
+collision_layer = 5
 script = ExtResource("1_4yr1q")
 SPEED = 900
 DASH_DURATION_SECONDS = 0.13
 DASH_LENGTH = 550
+INTERACT_DISTANCE = 200
 ELEMENT_INPUT_TIMEOUT = 1.15
 
 [node name="cameratarget" type="Marker2D" parent="."]
 
-[node name="Sprite2D" type="Sprite2D" parent="cameratarget"]
-visible = false
-texture = ExtResource("2_hux8n")
-
 [node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 2
+material = ExtResource("2_pha7q")
 texture = ExtResource("2_hux8n")
 
 [node name="element_input_timeout" type="Timer" parent="."]
@@ -36,5 +37,8 @@ text = "You"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -1)
 shape = SubResource("RectangleShape2D_8ggmo")
+
+[node name="object_interact" type="RayCast2D" parent="."]
+target_position = Vector2(0, 220)
 
 [connection signal="timeout" from="element_input_timeout" to="." method="_on_element_input_timeout_timeout"]

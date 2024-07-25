@@ -1,12 +1,11 @@
-[gd_scene load_steps=16 format=3 uid="uid://di4uiqohlx2qw"]
+[gd_scene load_steps=18 format=3 uid="uid://di4uiqohlx2qw"]
 
-[ext_resource type="Script" path="res://invisible_in_game.gd" id="1_3m3gt"]
-[ext_resource type="PackedScene" uid="uid://c0jdqg1xenskv" path="res://areaswitch.tscn" id="1_5doj2"]
 [ext_resource type="Script" path="res://camera.gd" id="1_6soux"]
 [ext_resource type="PackedScene" uid="uid://cdudyaojxmf5b" path="res://character.tscn" id="1_c4pgj"]
+[ext_resource type="Script" path="res://level_manager.gd" id="1_y802r"]
+[ext_resource type="Texture2D" uid="uid://drkmorxj7srgm" path="res://assets/cauldron.png" id="2_h2qva"]
+[ext_resource type="Material" uid="uid://6rno7n4h3tmh" path="res://pixelscaling.tres" id="2_thixl"]
 [ext_resource type="Script" path="res://ui.gd" id="3_2dt8t"]
-[ext_resource type="Script" path="res://spawner.gd" id="3_cqtm7"]
-[ext_resource type="PackedScene" uid="uid://cabod6cllbi2u" path="res://golem.tscn" id="4_2j3f2"]
 [ext_resource type="Script" path="res://resources.gd" id="4_dx30y"]
 [ext_resource type="Texture2D" uid="uid://dyonwqexiotim" path="res://assets/key_1.png" id="5_8587g"]
 [ext_resource type="Texture2D" uid="uid://id26krvsng4y" path="res://assets/spellslots.png" id="5_ul220"]
@@ -15,169 +14,122 @@
 [ext_resource type="Texture2D" uid="uid://c6usiuxdbx3kd" path="res://assets/key_3.png" id="7_xw07i"]
 [ext_resource type="Texture2D" uid="uid://tu5dunhlwvj3" path="res://assets/key_4.png" id="8_q4npa"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_mbe7n"]
-size = Vector2(213, 306)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_m8you"]
+
+[sub_resource type="Animation" id="Animation_uflhc"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("fade:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_jtfs1"]
+resource_name = "fade"
+length = 0.25
+step = 0.01
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("fade:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_kndt4"]
+_data = {
+"RESET": SubResource("Animation_uflhc"),
+"fade": SubResource("Animation_jtfs1")
+}
 
 [node name="world" type="Node2D"]
 
 [node name="level" type="Node2D" parent="."]
+script = ExtResource("1_y802r")
 
-[node name="ColorRect" type="ColorRect" parent="level"]
-offset_top = 743.0
-offset_right = 2072.0
-offset_bottom = 951.0
-color = Color(0, 0, 0, 1)
+[node name="crafting" type="CharacterBody2D" parent="."]
+position = Vector2(803, 552)
+scale = Vector2(6, 6)
 
-[node name="ColorRect2" type="ColorRect" parent="level"]
-offset_left = 2064.0
-offset_top = 84.0
-offset_right = 3806.0
-offset_bottom = 1686.0
-color = Color(0.39, 0.39, 0.39, 1)
+[node name="Sprite2D" type="Sprite2D" parent="crafting"]
+texture_filter = 2
+material = ExtResource("2_thixl")
+texture = ExtResource("2_h2qva")
 
-[node name="ColorRect3" type="ColorRect" parent="level"]
-offset_left = 2737.0
-offset_top = 1685.0
-offset_right = 2777.0
-offset_bottom = 1725.0
-scale = Vector2(8.75145, 9.13196)
-color = Color(0, 0, 0, 1)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="crafting"]
+shape = SubResource("RectangleShape2D_m8you")
 
-[node name="ColorRect4" type="ColorRect" parent="level"]
-offset_left = 1964.0
-offset_top = 2037.0
-offset_right = 2262.0
-offset_bottom = 2198.0
-scale = Vector2(8.75145, 9.13196)
-color = Color(0.388235, 0.388235, 0.388235, 1)
+[node name="projectiles" type="Node" parent="."]
 
-[node name="switch0" type="Polygon2D" parent="level"]
+[node name="character" parent="." node_paths=PackedStringArray("element_input_label") instance=ExtResource("1_c4pgj")]
+position = Vector2(363, 827)
+CAMERA_INPUT_UPDATE = 0.05
+DASH_LENGTH = 450
+CAMERA_TRACKING_OFFSET = 300
+ELEMENT_INPUT_TIMEOUT = 1.2
+PUSH_STRENGTH = 90
+element_input_label = NodePath("../ui/Label")
+
+[node name="camera" type="Camera2D" parent="."]
+position = Vector2(1150, 636)
+zoom = Vector2(0.45, 0.45)
+script = ExtResource("1_6soux")
+BASE_SPEED = 10000.0
+MAX_SPEED = 11000.0
+SPEED_SCALE = 10.0
+EASE_OUT_FACTOR = 0.7
+SMOOTHING_SPEED = 1.5
+MAX_OFFSET = 300.0
+MAX_DISTANCE = 2
+polygon_restraint_target = "switch0"
+
+[node name="ColorRect" type="ColorRect" parent="camera"]
 visible = false
-position = Vector2(1160, 632)
-polygon = PackedVector2Array(0, 0)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 0.156863, 1, 1)
 
-[node name="invisible_in_game" type="Node" parent="level/switch0"]
-script = ExtResource("1_3m3gt")
-
-[node name="switch1" type="Polygon2D" parent="level"]
+[node name="mouse_span" type="ColorRect" parent="camera"]
 visible = false
-position = Vector2(2912, 405)
-color = Color(1, 0.164706, 0.611765, 1)
-polygon = PackedVector2Array(0, 0, 0, 945)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -494.5
+offset_top = -328.0
+offset_right = 494.5
+offset_bottom = 328.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 0.156863, 1, 0.403922)
 
-[node name="invisible_in_game" type="Node" parent="level/switch1"]
-script = ExtResource("1_3m3gt")
-
-[node name="switch2" type="Polygon2D" parent="level"]
+[node name="test_camera" type="Camera2D" parent="."]
 visible = false
-position = Vector2(2948, 2345)
-color = Color(1, 0.164706, 0.611765, 1)
-polygon = PackedVector2Array(0, 0, 578, 0, 578, 605, 0, 605)
-
-[node name="invisible_in_game" type="Node" parent="level/switch2"]
-script = ExtResource("1_3m3gt")
-
-[node name="areaswitch" parent="level" instance=ExtResource("1_5doj2")]
-visible = false
-offset_left = 1967.0
-offset_top = 728.0
-offset_right = 2065.0
-offset_bottom = 974.0
-scene_to = "switch1"
-
-[node name="areaswitch2" parent="level" instance=ExtResource("1_5doj2")]
-visible = false
-offset_left = 2726.0
-offset_top = 1682.0
-offset_right = 3097.0
-offset_bottom = 1838.0
-scene_to = "switch2"
-
-[node name="spawner" type="Node2D" parent="level"]
-position = Vector2(3638, 280)
-script = ExtResource("3_cqtm7")
-
-[node name="ColorRect" type="ColorRect" parent="level/spawner"]
-offset_left = -107.0
-offset_top = -147.0
-offset_right = 107.0
-offset_bottom = 159.0
-color = Color(1, 0.490196, 0.490196, 1)
-
-[node name="Area2D" type="Area2D" parent="level/spawner"]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="level/spawner/Area2D"]
-position = Vector2(-0.5, 7)
-shape = SubResource("RectangleShape2D_mbe7n")
-debug_color = Color(0, 0.6, 0.701961, 0)
-
-[node name="spawner2" type="Node2D" parent="level"]
-position = Vector2(3638, 1438)
-script = ExtResource("3_cqtm7")
-which_wheel = "EarthWheel"
-
-[node name="ColorRect" type="ColorRect" parent="level/spawner2"]
-offset_left = -107.0
-offset_top = -147.0
-offset_right = 107.0
-offset_bottom = 159.0
-color = Color(0.611765, 0.729412, 0.388235, 1)
-
-[node name="Area2D" type="Area2D" parent="level/spawner2"]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="level/spawner2/Area2D"]
-position = Vector2(-0.5, 7)
-shape = SubResource("RectangleShape2D_mbe7n")
-debug_color = Color(0, 0.6, 0.701961, 0)
-
-[node name="Label" type="Label" parent="level"]
-offset_left = 3135.0
-offset_top = 684.0
-offset_right = 3280.0
-offset_bottom = 759.0
-scale = Vector2(4.45661, 4.07222)
-text = "Move onto these
-to gain an element
-of that color."
-
-[node name="Label2" type="Label" parent="level"]
-offset_left = 2116.0
-offset_top = 1400.0
-offset_right = 2435.0
-offset_bottom = 1475.0
-scale = Vector2(3.6605, 3.18349)
-text = "Type the keys below to activate that spell
-To use the fireball, right click to cast
-the projectile in that direction."
-
-[node name="Label3" type="Label" parent="level"]
-offset_left = 254.0
-offset_top = 301.0
-offset_right = 597.0
-offset_bottom = 350.0
-scale = Vector2(3.2767, 3.19002)
-text = "WASD to move.
-Space to dash in the direction you're moving"
-
-[node name="Label4" type="Label" parent="level"]
-offset_left = 1774.0
-offset_top = 970.0
-offset_right = 1854.0
-offset_bottom = 993.0
-scale = Vector2(3.2767, 3.19002)
-text = "Go here ->"
-
-[node name="golem" parent="level" instance=ExtResource("4_2j3f2")]
-position = Vector2(4111, 2720)
-HP = 3
-DASH_LENGTH = 500
-DASH_COOLDOWN_SECONDS = 1.0
-action_state = 1
-
-[node name="golem2" parent="level" instance=ExtResource("4_2j3f2")]
-position = Vector2(2954, 3193)
-HP = 3
-action_state = 1
+position = Vector2(3116, 2698)
+enabled = false
+zoom = Vector2(0.19, 0.19)
 
 [node name="ui" type="CanvasLayer" parent="."]
 script = ExtResource("3_2dt8t")
@@ -426,64 +378,33 @@ position = Vector2(1, 1)
 scale = Vector2(3, 3)
 texture = ExtResource("8_q4npa")
 
-[node name="projectiles" type="Node" parent="."]
-
-[node name="character" parent="." node_paths=PackedStringArray("element_input_label") instance=ExtResource("1_c4pgj")]
-position = Vector2(346, 743)
-CAMERA_INPUT_UPDATE = 0.05
-DASH_LENGTH = 450
-CAMERA_TRACKING_OFFSET = 300
-ELEMENT_INPUT_TIMEOUT = 1.2
-PUSH_STRENGTH = 90
-element_input_label = NodePath("../ui/Label")
-
-[node name="camera" type="Camera2D" parent="." node_paths=PackedStringArray("polygon_restraint")]
-position = Vector2(1150, 636)
-zoom = Vector2(0.5, 0.5)
-script = ExtResource("1_6soux")
-BASE_SPEED = 10000.0
-MAX_SPEED = 11000.0
-SPEED_SCALE = 10.0
-EASE_OUT_FACTOR = 0.7
-SMOOTHING_SPEED = 3.0
-MAX_OFFSET = 300.0
-MAX_DISTANCE = 2
-polygon_restraint = NodePath("../level/switch0")
-
-[node name="ColorRect" type="ColorRect" parent="camera"]
+[node name="ColorRect" type="ColorRect" parent="ui"]
 visible = false
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
+offset_left = 306.0
+offset_top = 88.0
+offset_right = 346.0
+offset_bottom = 128.0
+scale = Vector2(14.0833, 10.1057)
+
+[node name="Label" type="Label" parent="ui/ColorRect"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "craft"
+
+[node name="fade" type="ColorRect" parent="ui"]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(1, 0.156863, 1, 1)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+color = Color(0, 0, 0, 1)
 
-[node name="mouse_span" type="ColorRect" parent="camera"]
-visible = false
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -494.5
-offset_top = -328.0
-offset_right = 494.5
-offset_bottom = 328.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(1, 0.156863, 1, 0.403922)
-
-[node name="test_camera" type="Camera2D" parent="."]
-position = Vector2(3116, 2698)
-enabled = false
-zoom = Vector2(0.5, 0.5)
-
-[connection signal="body_entered" from="level/spawner/Area2D" to="level/spawner" method="_on_area_2d_body_entered"]
-[connection signal="body_entered" from="level/spawner2/Area2D" to="level/spawner2" method="_on_area_2d_body_entered"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ui"]
+libraries = {
+"": SubResource("AnimationLibrary_kndt4")
+}

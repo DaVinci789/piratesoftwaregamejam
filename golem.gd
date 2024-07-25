@@ -125,6 +125,6 @@ func update_dash(delta: float) -> void:
 func push(push_vector: Vector2) -> void:
 	velocity += push_vector
 
-func _on_projectile_hitbox_body_entered(body: Node2D) -> void:
+func _on_projectile_hitbox_body_entered(_body: Node2D) -> void:
 	HP -= 1
 	pass # Replace with function body.

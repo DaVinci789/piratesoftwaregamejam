@@ -5,9 +5,10 @@ extends CharacterBody2D
 @export var DASH_DURATION_SECONDS := 0.2
 @export var DASH_LENGTH := 350
 @export var CAMERA_TRACKING_OFFSET := 200
-@export var ELEMENT_INPUT_TIMEOUT := 0.5 :
+@export var INTERACT_DISTANCE := 220
+@export var ELEMENT_INPUT_TIMEOUT := 0.5:
 	set(value):
-		if $element_input_timeout:
+		if is_inside_tree() and $element_input_timeout:
 			$element_input_timeout.wait_time = value
 @export var PUSH_STRENGTH := 70
 
@@ -18,6 +19,8 @@ extends CharacterBody2D
 	get:
 		return $cameratarget.global_position
 var move_camera_target := true
+
+signal interact
 
 enum STATES {
 	Normal,
@@ -55,11 +58,17 @@ func _physics_process(delta: float) -> void:
 	if element_input_label.text.length() != 0 and $element_input_timeout.is_stopped():
 		$element_input_timeout.start()
 	
+	if Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized() != Vector2.ZERO:
+		$object_interact.target_position = Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized() * INTERACT_DISTANCE
+	
 	match state:
 		STATES.Normal:
 			get_input()
 			if Input.is_action_just_pressed("dash"):
 				state = STATES.Dash_Enter
+			
+			if Input.is_action_just_pressed("interact") and $object_interact.is_colliding():
+				emit_signal("interact", $object_interact.get_collider())
 			
 			var special_activate := special_activated()
 			if element_input_label.text == "Fireball!" and special_activate[0] == true:
@@ -89,8 +98,6 @@ func _physics_process(delta: float) -> void:
 			state = STATES.Dash
 			pass
 		STATES.Dash:
-			#velocity = (current_target - position).normalized() * (DASH_LENGTH / DASH_DURATION_SECONDS) 
-			#move_and_collide(velocity * delta)
 			dash_time_elapsed += delta
 			if dash_time_elapsed > DASH_DURATION_SECONDS:
 				dash_time_elapsed = DASH_DURATION_SECONDS  # Clamp to max duration
@@ -114,12 +121,12 @@ func special_activated() -> Array:
 
 func handle_collision(collision: KinematicCollision2D) -> void:
 	var collider := collision.get_collider()
-	if collider:
-		collider.push(-collision.get_normal().normalized() * PUSH_STRENGTH)
+	if collider and not collider is TileMap:
+		if collider.has_method("push"):
+			collider.push(-collision.get_normal().normalized() * PUSH_STRENGTH)
 
 func _on_dash_timeout() -> void:
 	state = STATES.Dash_Exit
-	pass # Replace with function body.
 
 func _on_cameratarget_update_timeout() -> void:
 	var input_vector := Input.get_vector("move_left", "move_right", "move_up", "move_down")

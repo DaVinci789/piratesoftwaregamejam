@@ -13,18 +13,30 @@ extends Camera2D
 @export var MAX_OFFSET := 200.0
 @export var MAX_DISTANCE := 100
 
-@export var polygon_restraint: Polygon2D
+@export var polygon_restraint_target := ""
+
+#@export
+var polygon_restraint: Polygon2D
 
 var velocity := Vector2.ZERO
 
 func change_room(to: String) -> void:
-	var jump_to: Polygon2D = get_node('/root/world').find_child(to)
-	print(to)
-	print(jump_to)
+	#var jump_to: Polygon2D = get_node('/root/world').find_child(to)
+	var jump_to: Polygon2D = null
+	for polygon: Polygon2D in Global.CurrentLevel.camera_polygon_restraints:
+		if polygon.name == to:
+			jump_to = polygon
+			break
 	if jump_to == null:
 		return
 	polygon_restraint = jump_to
 	pass
+
+func _ready() -> void:
+	for polygon: Polygon2D in Global.CurrentLevel.camera_polygon_restraints:
+		if polygon.name == polygon_restraint_target:
+			polygon_restraint = polygon
+			break
 
 func _process(delta: float) -> void:
 	# Get the global mouse position
@@ -55,19 +67,21 @@ func _process(delta: float) -> void:
 	move_towards_target(constrained_position, delta)
 
 func find_closest_point_to_polygon(point: Vector2, polygon: Polygon2D) -> Vector2:
+	if not polygon:
+		return point
 	if polygon.polygon.size() == 1:
-		return polygon.position + polygon.polygon[0]
+		return polygon.global_position + polygon.polygon[0]
 	elif polygon.polygon.size() == 2:
-		return Geometry2D.get_closest_point_to_segment(point, polygon.position + polygon.polygon[0], polygon.position + polygon.polygon[1])
+		return Geometry2D.get_closest_point_to_segment(point, polygon.global_position + polygon.polygon[0], polygon.global_position + polygon.polygon[1])
 	
 	var transformed_points: Array[Vector2] = []
 	for p: Vector2 in polygon.polygon:
-		transformed_points.append(polygon.position + p)
+		transformed_points.append(polygon.global_position + p)
 	
 	if Geometry2D.is_point_in_polygon(point, transformed_points):
 		return point
 	
-	var closest_point := polygon.position + polygon.polygon[0]
+	var closest_point := polygon.global_position + polygon.polygon[0]
 	var min_distance := 100000.0
 	
 	for i: int in range(polygon.polygon.size()):
