@@ -1,6 +1,8 @@
 extends CharacterBody2D
 
 @export var SPEED := 700
+@export var BASE_HP := 5
+var hp := BASE_HP
 @export var CAMERA_INPUT_UPDATE := 0.1
 @export var DASH_DURATION_SECONDS := 0.2
 @export var DASH_LENGTH := 350
@@ -37,6 +39,7 @@ var dash_previous_position := Vector2.ZERO
 var dash_time_elapsed := 0.0
 
 func _ready() -> void:
+	hp = BASE_HP
 	$element_input_timeout.wait_time = ELEMENT_INPUT_TIMEOUT
 	if element_input_label == null:
 		element_input_label = Label.new()
@@ -60,7 +63,12 @@ func _physics_process(delta: float) -> void:
 	
 	if Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized() != Vector2.ZERO:
 		$object_interact.target_position = Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized() * INTERACT_DISTANCE
-	
+		%AnimationTree.get("parameters/playback").travel("move")
+		%AnimationTree.set("parameters/move/BlendSpace2D/blend_position", Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized())
+		%AnimationTree.set("parameters/idle/BlendSpace2D/blend_position", Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized())
+	else:
+		%AnimationTree.get("parameters/playback").travel("idle")
+		
 	match state:
 		STATES.Normal:
 			get_input()

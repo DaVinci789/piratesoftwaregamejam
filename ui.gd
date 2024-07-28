@@ -1,12 +1,14 @@
 extends CanvasLayer
 
 func _ready() -> void:
-	Global.switch1_entered.connect(_on_switch1_entered)
+	Global.switch0_entered.connect(_on_switch0_entered)
+	$magic.modulate.a = 0
 
-func _on_switch1_entered() -> void:
+func _on_switch0_entered() -> void:
 	create_tween().tween_property($magic, "modulate", Color.WHITE, 0.2).set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_IN)
 
 func _process(_delta: float) -> void:
+	$debug_current_room.text = "HP: " + str(Global.Player.hp)
 	if $Label.text == "331":
 		if (Global.EarthWheel.elements_left > 0 and Global.FireWheel.elements_left > 0) or \
 		   (Global.EarthWheel.current_value > 0 and Global.FireWheel.current_value > 1):

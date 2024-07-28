@@ -25,12 +25,18 @@ gdscript/warnings/untyped_declaration=2
 
 [display]
 
-window/stretch/mode="viewport"
+window/size/viewport_width=478
+window/size/viewport_height=268
+window/stretch/mode="canvas_items"
 
 [editor]
 
 version_control/plugin_name="GitPlugin"
 version_control/autoload_on_startup=true
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/godot-vim/plugin.cfg")
 
 [input]
 
@@ -132,9 +138,12 @@ slash={
 
 [layer_names]
 
-2d_physics/layer_1="Actors"
-2d_physics/layer_2="Projectiles"
-2d_physics/layer_3="Player Only"
+2d_physics/layer_1="Walls"
+2d_physics/layer_2="Player"
+2d_physics/layer_3="Enemy"
+2d_physics/layer_4="Player Damage"
+2d_physics/layer_5="Areaswitch"
+2d_physics/layer_6="Enemy Hurtboxes"
 
 [rendering]
 

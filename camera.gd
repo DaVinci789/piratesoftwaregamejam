@@ -13,6 +13,8 @@ extends Camera2D
 @export var MAX_OFFSET := 200.0
 @export var MAX_DISTANCE := 100
 
+@export_category("Tracking Polygons")
+@export_file("*.tscn") var current_scene := ""
 @export var polygon_restraint_target := ""
 
 #@export
@@ -22,21 +24,25 @@ var velocity := Vector2.ZERO
 
 func change_room(to: String) -> void:
 	#var jump_to: Polygon2D = get_node('/root/world').find_child(to)
-	var jump_to: Polygon2D = null
-	for polygon: Polygon2D in Global.CurrentLevel.camera_polygon_restraints:
-		if polygon.name == to:
-			jump_to = polygon
-			break
-	if jump_to == null:
-		return
-	polygon_restraint = jump_to
+	polygon_restraint_target = to
+	#var jump_to: Polygon2D = Global.CurrentLevel.camera_polygon_restraints[to]
+	#for polygon: Polygon2D in Global.CurrentLevel.camera_polygon_restraints[to]:
+		#if polygon.name == to:
+			#jump_to = polygon
+			#break
+	#if jump_to == null:
+		#return
+	polygon_restraint = Global.CurrentLevel.camera_polygon_restraints[to]
 	pass
 
 func _ready() -> void:
-	for polygon: Polygon2D in Global.CurrentLevel.camera_polygon_restraints:
-		if polygon.name == polygon_restraint_target:
-			polygon_restraint = polygon
-			break
+	if current_scene == "":
+		return
+	polygon_restraint = Global.CurrentLevel.camera_polygon_restraints[polygon_restraint_target]
+	#for polygon: Polygon2D in Global.CurrentLevel.camera_polygon_restraints[polygon_restraint_target].get_children():
+		#if polygon.name == polygon_restraint_target:
+			#polygon_restraint = polygon
+			#break
 
 func _process(delta: float) -> void:
 	# Get the global mouse position
@@ -65,6 +71,7 @@ func _process(delta: float) -> void:
 
 	# Move towards the constrained position
 	move_towards_target(constrained_position, delta)
+	position = position.snapped(Vector2(0.1, 0.1))
 
 func find_closest_point_to_polygon(point: Vector2, polygon: Polygon2D) -> Vector2:
 	if not polygon:
@@ -104,12 +111,10 @@ func move_towards_target(target_position: Vector2, delta: float) -> void:
 	var t: float = clamp(distance_to_target / (BASE_SPEED * SPEED_SCALE), 0.0, 1.0)
 	var eased_t := pow(1.0 - t, EASE_OUT_FACTOR)
 	
-	var speed := BASE_SPEED + (distance_to_target * SPEED_SCALE * eased_t)
-	speed = clamp(speed, BASE_SPEED, MAX_SPEED)
+	#print(Global.Player.velocity.distance_to(Vector2.ZERO))
+	var speed := BASE_SPEED + (distance_to_target * SPEED_SCALE * eased_t) + Global.Player.velocity.distance_to(Vector2.ZERO)
+	#speed = clamp(speed, BASE_SPEED, MAX_SPEED)
 	
 	# Calculate interpolation factor
-	var interpolation_factor: float = min(speed * delta / distance_to_target, 1.0)
-	
+	var interpolation_factor: float = min(((speed * delta) / distance_to_target), 1.0)
 	position = position.lerp(target_position, interpolation_factor)
-	
-	

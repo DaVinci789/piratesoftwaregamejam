@@ -1,8 +1,9 @@
-[gd_scene load_steps=18 format=3 uid="uid://di4uiqohlx2qw"]
+[gd_scene load_steps=19 format=3 uid="uid://di4uiqohlx2qw"]
 
 [ext_resource type="Script" path="res://camera.gd" id="1_6soux"]
 [ext_resource type="PackedScene" uid="uid://cdudyaojxmf5b" path="res://character.tscn" id="1_c4pgj"]
 [ext_resource type="Script" path="res://level_manager.gd" id="1_y802r"]
+[ext_resource type="PackedScene" uid="uid://dmgnegofbm8i0" path="res://outlands.tscn" id="2_6m3ar"]
 [ext_resource type="Texture2D" uid="uid://drkmorxj7srgm" path="res://assets/cauldron.png" id="2_h2qva"]
 [ext_resource type="Material" uid="uid://6rno7n4h3tmh" path="res://pixelscaling.tres" id="2_thixl"]
 [ext_resource type="Script" path="res://ui.gd" id="3_2dt8t"]
@@ -59,13 +60,17 @@ _data = {
 [node name="level" type="Node2D" parent="."]
 script = ExtResource("1_y802r")
 
+[node name="outlands" parent="level" instance=ExtResource("2_6m3ar")]
+
 [node name="crafting" type="CharacterBody2D" parent="."]
+visible = false
 position = Vector2(803, 552)
 scale = Vector2(6, 6)
 
 [node name="Sprite2D" type="Sprite2D" parent="crafting"]
 texture_filter = 2
 material = ExtResource("2_thixl")
+scale = Vector2(0.5, 0.5)
 texture = ExtResource("2_h2qva")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="crafting"]
@@ -74,26 +79,23 @@ shape = SubResource("RectangleShape2D_m8you")
 [node name="projectiles" type="Node" parent="."]
 
 [node name="character" parent="." node_paths=PackedStringArray("element_input_label") instance=ExtResource("1_c4pgj")]
-position = Vector2(363, 827)
+position = Vector2(496, 94)
+SPEED = 250
 CAMERA_INPUT_UPDATE = 0.05
-DASH_LENGTH = 450
+DASH_LENGTH = 100
 CAMERA_TRACKING_OFFSET = 300
 ELEMENT_INPUT_TIMEOUT = 1.2
 PUSH_STRENGTH = 90
 element_input_label = NodePath("../ui/Label")
 
 [node name="camera" type="Camera2D" parent="."]
-position = Vector2(1150, 636)
-zoom = Vector2(0.45, 0.45)
+position = Vector2(343, 194)
+zoom = Vector2(0.7, 0.7)
 script = ExtResource("1_6soux")
-BASE_SPEED = 10000.0
-MAX_SPEED = 11000.0
-SPEED_SCALE = 10.0
-EASE_OUT_FACTOR = 0.7
-SMOOTHING_SPEED = 1.5
-MAX_OFFSET = 300.0
-MAX_DISTANCE = 2
-polygon_restraint_target = "switch0"
+SMOOTHING_SPEED = 3.0
+MAX_OFFSET = 100.0
+current_scene = "res://outlands.tscn"
+polygon_restraint_target = "camp"
 
 [node name="ColorRect" type="ColorRect" parent="camera"]
 visible = false
@@ -135,18 +137,29 @@ zoom = Vector2(0.19, 0.19)
 script = ExtResource("3_2dt8t")
 
 [node name="Label" type="Label" parent="ui"]
-offset_left = 457.0
-offset_top = -7.0
-offset_right = 497.0
-offset_bottom = 16.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -94.0
+offset_right = -110.0
+offset_bottom = -71.0
+grow_horizontal = 2
+grow_vertical = 2
 scale = Vector2(7.56, 8.2)
+size_flags_horizontal = 4
+
+[node name="debug_current_room" type="Label" parent="ui"]
+offset_right = 40.0
+offset_bottom = 23.0
 
 [node name="magic" type="Node2D" parent="ui"]
-modulate = Color(1, 1, 1, 0)
 
 [node name="earth" type="Node2D" parent="ui/magic"]
-position = Vector2(64, 144)
-scale = Vector2(0.75, 0.75)
+position = Vector2(40, 174)
+scale = Vector2(0.4, 0.4)
 script = ExtResource("4_dx30y")
 meter_color = Color(0.51027, 0.73, 0.1022, 1)
 
@@ -165,8 +178,8 @@ scale = Vector2(2.09901, 2.68)
 text = "2"
 
 [node name="air" type="Node2D" parent="ui/magic"]
-position = Vector2(60, 254)
-scale = Vector2(0.75, 0.75)
+position = Vector2(36, 232)
+scale = Vector2(0.4, 0.4)
 script = ExtResource("4_dx30y")
 meter_color = Color(0.8827, 0.906815, 0.91, 1)
 
@@ -185,8 +198,8 @@ scale = Vector2(2.09901, 2.68)
 text = "0"
 
 [node name="fire" type="Node2D" parent="ui/magic"]
-position = Vector2(60, 372)
-scale = Vector2(0.75, 0.75)
+position = Vector2(451, 192)
+scale = Vector2(0.4, 0.4)
 script = ExtResource("4_dx30y")
 meter_color = Color(0.99, 0.1122, 0.0495, 1)
 
@@ -205,8 +218,8 @@ scale = Vector2(2.09901, 2.68)
 text = "2"
 
 [node name="water" type="Node2D" parent="ui/magic"]
-position = Vector2(62, 480)
-scale = Vector2(0.75, 0.75)
+position = Vector2(453, 241)
+scale = Vector2(0.4, 0.4)
 script = ExtResource("4_dx30y")
 meter_color = Color(0.1092, 0.74984, 0.91, 1)
 
@@ -225,7 +238,8 @@ scale = Vector2(2.09901, 2.68)
 text = "0"
 
 [node name="Spellslots" type="Sprite2D" parent="ui/magic" node_paths=PackedStringArray("key_input_label")]
-position = Vector2(568, 592)
+position = Vector2(243, 249)
+scale = Vector2(0.322364, 0.322364)
 texture = ExtResource("5_ul220")
 script = ExtResource("7_87xio")
 key_input_label = NodePath("../../Label")
@@ -380,11 +394,11 @@ texture = ExtResource("8_q4npa")
 
 [node name="ColorRect" type="ColorRect" parent="ui"]
 visible = false
-offset_left = 306.0
-offset_top = 88.0
-offset_right = 346.0
-offset_bottom = 128.0
-scale = Vector2(14.0833, 10.1057)
+offset_left = 144.0
+offset_top = 53.0
+offset_right = 184.0
+offset_bottom = 93.0
+scale = Vector2(4.89506, 3.51253)
 
 [node name="Label" type="Label" parent="ui/ColorRect"]
 layout_mode = 0

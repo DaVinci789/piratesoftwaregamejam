@@ -2,7 +2,9 @@ extends CharacterBody2D
 
 func _process(delta: float) -> void:
 	velocity = transform.x * 2000
-	move_and_collide(velocity * delta)
+	var collision := move_and_collide(velocity * delta)
+	if collision:
+		queue_free()
 
 
 func _on_visible_on_screen_notifier_2d_screen_exited() -> void:
