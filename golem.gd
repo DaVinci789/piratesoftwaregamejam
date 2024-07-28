@@ -17,11 +17,13 @@ extends CharacterBody2D
 @export var ACTIVE := false
 @export var action_state := ACTION_STATES.Idle
 @export var BASE_SPEED := 20
-@export var HP := 3:
+@export var HP: float = 3.0:
 	set(value):
 		HP = value
 		$hp_label_temp.text = "HP: " + str(value)
 		if value == 0:
+			queue_free()
+		elif value < 0:
 			queue_free()
 @export var DASH_LENGTH := 200
 @export var DASH_DURATION_SECONDS := 0.5
@@ -133,11 +135,10 @@ func update_dash(delta: float) -> void:
 func push(push_vector: Vector2) -> void:
 	velocity += push_vector
 
-func send_damage(body: Node2D) -> void:
+func send_damage(_body: Node2D) -> void:
 	var effect := Effect.new()
 	effect.damage = ATTACK_1_DAMAGE
 	Global.effect_player(effect)
 
-func _on_hurtbox_area_entered(area: Area2D) -> void:
-	HP -= 1
-	pass # Replace with function body.
+func apply_effect(effect: Effect) -> void:
+	HP -= effect.damage

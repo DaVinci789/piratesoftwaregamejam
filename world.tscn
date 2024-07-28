@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://di4uiqohlx2qw"]
+[gd_scene load_steps=20 format=3 uid="uid://di4uiqohlx2qw"]
 
 [ext_resource type="Script" path="res://camera.gd" id="1_6soux"]
 [ext_resource type="PackedScene" uid="uid://cdudyaojxmf5b" path="res://character.tscn" id="1_c4pgj"]
@@ -14,6 +14,7 @@
 [ext_resource type="Script" path="res://Spellslots.gd" id="7_87xio"]
 [ext_resource type="Texture2D" uid="uid://c6usiuxdbx3kd" path="res://assets/key_3.png" id="7_xw07i"]
 [ext_resource type="Texture2D" uid="uid://tu5dunhlwvj3" path="res://assets/key_4.png" id="8_q4npa"]
+[ext_resource type="Texture2D" uid="uid://uy11f7fickb4" path="res://assets/recticle.png" id="15_nspx7"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_m8you"]
 
@@ -422,3 +423,6 @@ color = Color(0, 0, 0, 1)
 libraries = {
 "": SubResource("AnimationLibrary_kndt4")
 }
+
+[node name="recticle" type="Sprite2D" parent="ui"]
+texture = ExtResource("15_nspx7")

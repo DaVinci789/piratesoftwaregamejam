@@ -2,6 +2,7 @@ extends Node
 
 var Camera: Camera2D
 var Player: CharacterBody2D
+var Projectiles: Node
 var CurrentLevel: Node2D
 var UI: CanvasLayer
 
@@ -20,6 +21,7 @@ func _ready() -> void:
 	
 	Camera = get_node('/root/world/camera')
 	Player = get_node('/root/world/character')
+	Projectiles = get_node('/root/world/projectiles')
 	EarthWheel = get_node('/root/world/ui/magic/earth')
 	AirWheel = get_node('/root/world/ui/magic/air')
 	FireWheel = get_node('/root/world/ui/magic/fire')

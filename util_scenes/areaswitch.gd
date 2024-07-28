@@ -16,20 +16,24 @@ extends ColorRect
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
+	%cameraswitch/CollisionShape2D.global_position = position
+	%cameraswitch/CollisionShape2D.global_position.x += size.x / 2
+	%cameraswitch/CollisionShape2D.global_position.y += size.y / 2
 	%cameraswitch/CollisionShape2D.shape.size = size
-	%next_area_load/CollisionShape2D.shape.radius = next_area_load_radius
 	if connect_to_scene != "":
 		ResourceLoader.load_threaded_request(connect_to_scene)
-	else:
-		%next_area_load.monitoring = false
 	#visible = false
 
 func _process(_delta: float) -> void:
 	if not Engine.is_editor_hint():
 		return
-	%next_area_load/CollisionShape2D.shape.radius = next_area_load_radius
-	%next_area_load.position =  size / 2
-	%next_area_load.visible = next_area_load_visible
+	%cameraswitch/CollisionShape2D.global_position = position
+	%cameraswitch/CollisionShape2D.global_position.x += size.x / 2
+	%cameraswitch/CollisionShape2D.global_position.y += size.y / 2
+	%cameraswitch/CollisionShape2D.shape.size = size
+	%cameraswitch.visible = next_area_load_visible
+	%cameraswitch/CollisionShape2D.visible = next_area_load_visible
+
 
 func _on_cameraswitch_body_entered(_body: Node2D) -> void:
 	Global.change_room(snap_camera_to_polygon)

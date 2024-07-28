@@ -13,6 +13,7 @@ var hp := BASE_HP
 		if is_inside_tree() and $element_input_timeout:
 			$element_input_timeout.wait_time = value
 @export var PUSH_STRENGTH := 70
+@export var SLASH_DAMAGE := 0.5
 
 @export var element_input_label: Label
 
@@ -21,6 +22,8 @@ var hp := BASE_HP
 	get:
 		return $cameratarget.global_position
 var move_camera_target := true
+
+@export var spell_scenes: Array[PackedScene] = []
 
 signal interact
 
@@ -38,8 +41,11 @@ var current_target := Vector2.ZERO
 var dash_previous_position := Vector2.ZERO
 var dash_time_elapsed := 0.0
 
+var slash_damage := Effect.new()
+
 func _ready() -> void:
 	hp = BASE_HP
+	slash_damage.damage = SLASH_DAMAGE
 	$element_input_timeout.wait_time = ELEMENT_INPUT_TIMEOUT
 	if element_input_label == null:
 		element_input_label = Label.new()
@@ -66,8 +72,28 @@ func _physics_process(delta: float) -> void:
 		%AnimationTree.get("parameters/playback").travel("move")
 		%AnimationTree.set("parameters/move/BlendSpace2D/blend_position", Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized())
 		%AnimationTree.set("parameters/idle/BlendSpace2D/blend_position", Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized())
+		%AnimationTree.set("parameters/slash/BlendSpace2D/blend_position", Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized())
 	else:
-		%AnimationTree.get("parameters/playback").travel("idle")
+		if %AnimationTree.get("parameters/playback").get_current_node() != "slash":
+			%AnimationTree.get("parameters/playback").travel("idle")
+			
+	var special_activate := special_activated()
+	if special_activate[0] == true:
+		if element_input_label.text == "Fireball!":
+			element_input_label.text = ""
+			var to_launch := spell_scenes[0].instantiate()
+			to_launch.global_position = global_position
+			if special_activate[1] != Vector2.ZERO:
+				to_launch.rotate(special_activate[1].angle())
+			else:
+				to_launch.look_at(get_global_mouse_position())
+			Global.Projectiles.add_child(to_launch)
+		elif element_input_label.text == "Earthshock!":
+			element_input_label.text = ""
+			var to_launch := spell_scenes[1].instantiate()
+			to_launch.global_position = global_position
+			Global.Projectiles.add_child(to_launch)
+			pass
 		
 	match state:
 		STATES.Normal:
@@ -77,17 +103,9 @@ func _physics_process(delta: float) -> void:
 			
 			if Input.is_action_just_pressed("interact") and $object_interact.is_colliding():
 				emit_signal("interact", $object_interact.get_collider())
-			
-			var special_activate := special_activated()
-			if element_input_label.text == "Fireball!" and special_activate[0] == true:
-				element_input_label.text = ""
-				var to_launch := projectile_scene.instantiate()
-				to_launch.global_position = global_position
-				if special_activate[1] != Vector2.ZERO:
-					to_launch.rotate(special_activate[1].angle())
-				else:
-					to_launch.look_at(get_global_mouse_position())
-				get_tree().root.add_child(to_launch)
+				
+			if Input.is_action_just_pressed("slash"):
+				%AnimationTree.get("parameters/playback").travel("slash")
 			
 			var collision := move_and_collide(velocity * delta)
 			if collision:
@@ -154,5 +172,25 @@ func _on_cameratarget_update_timeout() -> void:
 	pass # Replace with function body.
 
 func _on_element_input_timeout_timeout() -> void:
-	if element_input_label.text != "Fireball!":
+	if element_input_label.text != "Fireball!" and element_input_label.text != "Earthshock!":
 		element_input_label.text = ""
+
+
+func _on_slash_hitbox_up_area_entered(area: Area2D) -> void:
+	area.get_parent().apply_effect(slash_damage)
+	pass # Replace with function body.
+
+
+func _on_slash_hitbox_left_area_entered(area: Area2D) -> void:
+	area.get_parent().apply_effect(slash_damage)
+	pass # Replace with function body.
+
+
+func _on_slash_hitbox_right_area_entered(area: Area2D) -> void:
+	area.get_parent().apply_effect(slash_damage)
+	pass # Replace with function body.
+
+
+func _on_slash_hitbox_down_area_entered(area: Area2D) -> void:
+	area.get_parent().apply_effect(slash_damage)
+	pass # Replace with function body.
