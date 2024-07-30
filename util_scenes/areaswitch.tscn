@@ -9,7 +9,6 @@ size = Vector2(280, 32)
 offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("1_voemo")
-next_area_load_radius = 10
 
 [node name="cameraswitch" type="Area2D" parent="."]
 unique_name_in_owner = true
@@ -19,6 +18,7 @@ collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="cameraswitch"]
 visible = false
+position = Vector2(20, 20)
 shape = SubResource("RectangleShape2D_6ycyu")
 
 [connection signal="body_entered" from="cameraswitch" to="." method="_on_cameraswitch_body_entered"]

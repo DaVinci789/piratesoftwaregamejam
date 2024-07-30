@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://di4uiqohlx2qw"]
+[gd_scene load_steps=55 format=3 uid="uid://di4uiqohlx2qw"]
 
 [ext_resource type="Script" path="res://camera.gd" id="1_6soux"]
 [ext_resource type="PackedScene" uid="uid://cdudyaojxmf5b" path="res://character.tscn" id="1_c4pgj"]
@@ -8,15 +8,482 @@
 [ext_resource type="Material" uid="uid://6rno7n4h3tmh" path="res://pixelscaling.tres" id="2_thixl"]
 [ext_resource type="Script" path="res://ui.gd" id="3_2dt8t"]
 [ext_resource type="Script" path="res://resources.gd" id="4_dx30y"]
-[ext_resource type="Texture2D" uid="uid://dyonwqexiotim" path="res://assets/key_1.png" id="5_8587g"]
-[ext_resource type="Texture2D" uid="uid://id26krvsng4y" path="res://assets/spellslots.png" id="5_ul220"]
-[ext_resource type="Texture2D" uid="uid://dks0badrcgdpw" path="res://assets/key_2.png" id="6_ustib"]
 [ext_resource type="Script" path="res://Spellslots.gd" id="7_87xio"]
-[ext_resource type="Texture2D" uid="uid://c6usiuxdbx3kd" path="res://assets/key_3.png" id="7_xw07i"]
-[ext_resource type="Texture2D" uid="uid://tu5dunhlwvj3" path="res://assets/key_4.png" id="8_q4npa"]
+[ext_resource type="Texture2D" uid="uid://dgkdox2d2jyie" path="res://assets/cost_orbs.png" id="11_1uc7j"]
+[ext_resource type="Material" uid="uid://kxgcfjp076yn" path="res://key_flash.tres" id="11_6kjg3"]
 [ext_resource type="Texture2D" uid="uid://uy11f7fickb4" path="res://assets/recticle.png" id="15_nspx7"]
+[ext_resource type="FontFile" uid="uid://mfvqnhy5lyyl" path="res://assets/fonts/Yolk 6.ttf" id="16_8swc5"]
+[ext_resource type="Texture2D" uid="uid://cjir2t0kq8ud2" path="res://assets/fist.png" id="16_gjoyt"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_m8you"]
+
+[sub_resource type="Shader" id="Shader_3vk60"]
+code = "shader_type canvas_item;
+
+uniform bool enable = false;
+
+void vertex() {
+	// Called for every vertex the material is visible on.
+}
+
+void fragment() {
+	if (enable) {
+		COLOR = vec4(1.0, 1.0, 1.0, COLOR.a);
+	}
+	// Called for every pixel the material is visible on.
+}
+
+//void light() {
+	// Called for every pixel for every light affecting the CanvasItem.
+	// Uncomment to replace the default light processing function with this one.
+//}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cshsq"]
+shader = SubResource("Shader_3vk60")
+shader_parameter/enable = false
+
+[sub_resource type="Shader" id="Shader_jsn3m"]
+code = "shader_type canvas_item;
+
+uniform bool enable = false;
+
+void vertex() {
+	// Called for every vertex the material is visible on.
+}
+
+void fragment() {
+	if (enable) {
+		COLOR = vec4(1.0, 1.0, 1.0, COLOR.a);
+	}
+	// Called for every pixel the material is visible on.
+}
+
+//void light() {
+	// Called for every pixel for every light affecting the CanvasItem.
+	// Uncomment to replace the default light processing function with this one.
+//}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fp1p4"]
+shader = SubResource("Shader_jsn3m")
+shader_parameter/enable = false
+
+[sub_resource type="Shader" id="Shader_hgdq7"]
+code = "shader_type canvas_item;
+
+uniform bool enable = false;
+
+void vertex() {
+	// Called for every vertex the material is visible on.
+}
+
+void fragment() {
+	if (enable) {
+		COLOR = vec4(1.0, 1.0, 1.0, COLOR.a);
+	}
+	// Called for every pixel the material is visible on.
+}
+
+//void light() {
+	// Called for every pixel for every light affecting the CanvasItem.
+	// Uncomment to replace the default light processing function with this one.
+//}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kdyf4"]
+shader = SubResource("Shader_hgdq7")
+shader_parameter/enable = false
+
+[sub_resource type="Shader" id="Shader_m7ins"]
+code = "shader_type canvas_item;
+
+uniform bool enable = false;
+
+void vertex() {
+	// Called for every vertex the material is visible on.
+}
+
+void fragment() {
+	if (enable) {
+		COLOR = vec4(1.0, 1.0, 1.0, COLOR.a);
+	}
+	// Called for every pixel the material is visible on.
+}
+
+//void light() {
+	// Called for every pixel for every light affecting the CanvasItem.
+	// Uncomment to replace the default light processing function with this one.
+//}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_i1a2u"]
+shader = SubResource("Shader_m7ins")
+shader_parameter/enable = false
+
+[sub_resource type="Shader" id="Shader_cxmor"]
+code = "shader_type canvas_item;
+
+uniform bool enable = false;
+
+void vertex() {
+	// Called for every vertex the material is visible on.
+}
+
+void fragment() {
+	if (enable) {
+		COLOR = vec4(1.0, 1.0, 1.0, COLOR.a);
+	}
+	// Called for every pixel the material is visible on.
+}
+
+//void light() {
+	// Called for every pixel for every light affecting the CanvasItem.
+	// Uncomment to replace the default light processing function with this one.
+//}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p62pb"]
+shader = SubResource("Shader_cxmor")
+shader_parameter/enable = false
+
+[sub_resource type="Shader" id="Shader_yshac"]
+code = "shader_type canvas_item;
+
+uniform bool enable = false;
+
+void vertex() {
+	// Called for every vertex the material is visible on.
+}
+
+void fragment() {
+	if (enable) {
+		COLOR = vec4(1.0, 1.0, 1.0, COLOR.a);
+	}
+	// Called for every pixel the material is visible on.
+}
+
+//void light() {
+	// Called for every pixel for every light affecting the CanvasItem.
+	// Uncomment to replace the default light processing function with this one.
+//}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gekke"]
+shader = SubResource("Shader_yshac")
+shader_parameter/enable = false
+
+[sub_resource type="Shader" id="Shader_b6utt"]
+code = "shader_type canvas_item;
+
+uniform bool enable = false;
+
+void vertex() {
+	// Called for every vertex the material is visible on.
+}
+
+void fragment() {
+	if (enable) {
+		COLOR = vec4(1.0, 1.0, 1.0, COLOR.a);
+	}
+	// Called for every pixel the material is visible on.
+}
+
+//void light() {
+	// Called for every pixel for every light affecting the CanvasItem.
+	// Uncomment to replace the default light processing function with this one.
+//}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xi4gh"]
+shader = SubResource("Shader_b6utt")
+shader_parameter/enable = false
+
+[sub_resource type="Shader" id="Shader_ck3sd"]
+code = "shader_type canvas_item;
+
+uniform bool enable = false;
+
+void vertex() {
+	// Called for every vertex the material is visible on.
+}
+
+void fragment() {
+	if (enable) {
+		COLOR = vec4(1.0, 1.0, 1.0, COLOR.a);
+	}
+	// Called for every pixel the material is visible on.
+}
+
+//void light() {
+	// Called for every pixel for every light affecting the CanvasItem.
+	// Uncomment to replace the default light processing function with this one.
+//}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_i361x"]
+shader = SubResource("Shader_ck3sd")
+shader_parameter/enable = false
+
+[sub_resource type="Shader" id="Shader_38eta"]
+code = "shader_type canvas_item;
+
+uniform bool enable = false;
+
+void vertex() {
+	// Called for every vertex the material is visible on.
+}
+
+void fragment() {
+	if (enable) {
+		COLOR = vec4(1.0, 1.0, 1.0, COLOR.a);
+	}
+	// Called for every pixel the material is visible on.
+}
+
+//void light() {
+	// Called for every pixel for every light affecting the CanvasItem.
+	// Uncomment to replace the default light processing function with this one.
+//}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_urpvf"]
+shader = SubResource("Shader_38eta")
+shader_parameter/enable = false
+
+[sub_resource type="Shader" id="Shader_0u4mw"]
+code = "shader_type canvas_item;
+
+uniform bool enable = false;
+
+void vertex() {
+	// Called for every vertex the material is visible on.
+}
+
+void fragment() {
+	if (enable) {
+		COLOR = vec4(1.0, 1.0, 1.0, COLOR.a);
+	}
+	// Called for every pixel the material is visible on.
+}
+
+//void light() {
+	// Called for every pixel for every light affecting the CanvasItem.
+	// Uncomment to replace the default light processing function with this one.
+//}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_x3ap7"]
+shader = SubResource("Shader_0u4mw")
+shader_parameter/enable = false
+
+[sub_resource type="Shader" id="Shader_w8alf"]
+code = "shader_type canvas_item;
+
+uniform bool enable = false;
+
+void vertex() {
+	// Called for every vertex the material is visible on.
+}
+
+void fragment() {
+	if (enable) {
+		COLOR = vec4(1.0, 1.0, 1.0, COLOR.a);
+	}
+	// Called for every pixel the material is visible on.
+}
+
+//void light() {
+	// Called for every pixel for every light affecting the CanvasItem.
+	// Uncomment to replace the default light processing function with this one.
+//}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_abhmq"]
+shader = SubResource("Shader_w8alf")
+shader_parameter/enable = false
+
+[sub_resource type="Shader" id="Shader_jmovv"]
+code = "shader_type canvas_item;
+
+uniform bool enable = false;
+
+void vertex() {
+	// Called for every vertex the material is visible on.
+}
+
+void fragment() {
+	if (enable) {
+		COLOR = vec4(1.0, 1.0, 1.0, COLOR.a);
+	}
+	// Called for every pixel the material is visible on.
+}
+
+//void light() {
+	// Called for every pixel for every light affecting the CanvasItem.
+	// Uncomment to replace the default light processing function with this one.
+//}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0kdyf"]
+shader = SubResource("Shader_jmovv")
+shader_parameter/enable = false
+
+[sub_resource type="Shader" id="Shader_36ipd"]
+code = "shader_type canvas_item;
+
+uniform bool enable = false;
+
+void vertex() {
+	// Called for every vertex the material is visible on.
+}
+
+void fragment() {
+	if (enable) {
+		COLOR = vec4(1.0, 1.0, 1.0, COLOR.a);
+	}
+	// Called for every pixel the material is visible on.
+}
+
+//void light() {
+	// Called for every pixel for every light affecting the CanvasItem.
+	// Uncomment to replace the default light processing function with this one.
+//}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5pb5q"]
+shader = SubResource("Shader_36ipd")
+shader_parameter/enable = false
+
+[sub_resource type="Shader" id="Shader_wir3g"]
+code = "shader_type canvas_item;
+
+uniform bool enable = false;
+
+void vertex() {
+	// Called for every vertex the material is visible on.
+}
+
+void fragment() {
+	if (enable) {
+		COLOR = vec4(1.0, 1.0, 1.0, COLOR.a);
+	}
+	// Called for every pixel the material is visible on.
+}
+
+//void light() {
+	// Called for every pixel for every light affecting the CanvasItem.
+	// Uncomment to replace the default light processing function with this one.
+//}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_umx5m"]
+shader = SubResource("Shader_wir3g")
+shader_parameter/enable = false
+
+[sub_resource type="Shader" id="Shader_apc5l"]
+code = "shader_type canvas_item;
+
+uniform bool enable = false;
+
+void vertex() {
+	// Called for every vertex the material is visible on.
+}
+
+void fragment() {
+	if (enable) {
+		COLOR = vec4(1.0, 1.0, 1.0, COLOR.a);
+	}
+	// Called for every pixel the material is visible on.
+}
+
+//void light() {
+	// Called for every pixel for every light affecting the CanvasItem.
+	// Uncomment to replace the default light processing function with this one.
+//}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ksdrx"]
+shader = SubResource("Shader_apc5l")
+shader_parameter/enable = false
+
+[sub_resource type="Shader" id="Shader_oj7mt"]
+code = "shader_type canvas_item;
+
+uniform bool enable = false;
+
+void vertex() {
+	// Called for every vertex the material is visible on.
+}
+
+void fragment() {
+	if (enable) {
+		COLOR = vec4(1.0, 1.0, 1.0, COLOR.a);
+	}
+	// Called for every pixel the material is visible on.
+}
+
+//void light() {
+	// Called for every pixel for every light affecting the CanvasItem.
+	// Uncomment to replace the default light processing function with this one.
+//}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_srgeu"]
+shader = SubResource("Shader_oj7mt")
+shader_parameter/enable = false
+
+[sub_resource type="Shader" id="Shader_7n2u0"]
+code = "shader_type canvas_item;
+
+uniform bool enable = false;
+
+void vertex() {
+	// Called for every vertex the material is visible on.
+}
+
+void fragment() {
+	if (enable) {
+		COLOR = vec4(1.0, 1.0, 1.0, COLOR.a);
+	}
+	// Called for every pixel the material is visible on.
+}
+
+//void light() {
+	// Called for every pixel for every light affecting the CanvasItem.
+	// Uncomment to replace the default light processing function with this one.
+//}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_u7v5r"]
+shader = SubResource("Shader_7n2u0")
+shader_parameter/enable = false
+
+[sub_resource type="Shader" id="Shader_gqlfa"]
+code = "shader_type canvas_item;
+
+uniform bool enable = false;
+
+void vertex() {
+	// Called for every vertex the material is visible on.
+}
+
+void fragment() {
+	if (enable) {
+		COLOR = vec4(1.0, 1.0, 1.0, COLOR.a);
+	}
+	// Called for every pixel the material is visible on.
+}
+
+//void light() {
+	// Called for every pixel for every light affecting the CanvasItem.
+	// Uncomment to replace the default light processing function with this one.
+//}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_c5rp7"]
+shader = SubResource("Shader_gqlfa")
+shader_parameter/enable = false
 
 [sub_resource type="Animation" id="Animation_uflhc"]
 length = 0.001
@@ -61,6 +528,10 @@ _data = {
 [node name="level" type="Node2D" parent="."]
 script = ExtResource("1_y802r")
 
+[node name="time_left" type="Timer" parent="level"]
+wait_time = 600.0
+autostart = true
+
 [node name="outlands" parent="level" instance=ExtResource("2_6m3ar")]
 
 [node name="crafting" type="CharacterBody2D" parent="."]
@@ -79,15 +550,14 @@ shape = SubResource("RectangleShape2D_m8you")
 
 [node name="projectiles" type="Node" parent="."]
 
-[node name="character" parent="." node_paths=PackedStringArray("element_input_label") instance=ExtResource("1_c4pgj")]
-position = Vector2(496, 94)
+[node name="character" parent="." instance=ExtResource("1_c4pgj")]
+position = Vector2(380, 280)
 SPEED = 250
 CAMERA_INPUT_UPDATE = 0.05
 DASH_LENGTH = 100
 CAMERA_TRACKING_OFFSET = 300
 ELEMENT_INPUT_TIMEOUT = 1.2
 PUSH_STRENGTH = 90
-element_input_label = NodePath("../ui/Label")
 
 [node name="camera" type="Camera2D" parent="."]
 position = Vector2(343, 194)
@@ -135,6 +605,7 @@ enabled = false
 zoom = Vector2(0.19, 0.19)
 
 [node name="ui" type="CanvasLayer" parent="."]
+layer = 0
 script = ExtResource("3_2dt8t")
 
 [node name="Label" type="Label" parent="ui"]
@@ -159,7 +630,7 @@ offset_bottom = 23.0
 [node name="magic" type="Node2D" parent="ui"]
 
 [node name="earth" type="Node2D" parent="ui/magic"]
-position = Vector2(40, 174)
+position = Vector2(29, 192)
 scale = Vector2(0.4, 0.4)
 script = ExtResource("4_dx30y")
 meter_color = Color(0.51027, 0.73, 0.1022, 1)
@@ -179,7 +650,7 @@ scale = Vector2(2.09901, 2.68)
 text = "2"
 
 [node name="air" type="Node2D" parent="ui/magic"]
-position = Vector2(36, 232)
+position = Vector2(29, 241)
 scale = Vector2(0.4, 0.4)
 script = ExtResource("4_dx30y")
 meter_color = Color(0.8827, 0.906815, 0.91, 1)
@@ -199,7 +670,7 @@ scale = Vector2(2.09901, 2.68)
 text = "0"
 
 [node name="fire" type="Node2D" parent="ui/magic"]
-position = Vector2(451, 192)
+position = Vector2(450, 195)
 scale = Vector2(0.4, 0.4)
 script = ExtResource("4_dx30y")
 meter_color = Color(0.99, 0.1122, 0.0495, 1)
@@ -219,7 +690,7 @@ scale = Vector2(2.09901, 2.68)
 text = "2"
 
 [node name="water" type="Node2D" parent="ui/magic"]
-position = Vector2(453, 241)
+position = Vector2(451, 243)
 scale = Vector2(0.4, 0.4)
 script = ExtResource("4_dx30y")
 meter_color = Color(0.1092, 0.74984, 0.91, 1)
@@ -238,181 +709,1116 @@ offset_bottom = -10.0
 scale = Vector2(2.09901, 2.68)
 text = "0"
 
-[node name="Spellslots" type="Sprite2D" parent="ui/magic" node_paths=PackedStringArray("key_input_label")]
-position = Vector2(243, 249)
+[node name="Spellslots1" type="Node2D" parent="ui/magic" node_paths=PackedStringArray("key_input_label")]
+position = Vector2(244, 249)
 scale = Vector2(0.322364, 0.322364)
-texture = ExtResource("5_ul220")
 script = ExtResource("7_87xio")
 key_input_label = NodePath("../../Label")
 
-[node name="slot1" type="Node2D" parent="ui/magic/Spellslots"]
+[node name="slot1" type="Node2D" parent="ui/magic/Spellslots1"]
 position = Vector2(-515, 1)
 
-[node name="ColorRect" type="ColorRect" parent="ui/magic/Spellslots/slot1"]
-offset_left = -36.0
-offset_top = -36.0
-offset_right = 34.0
-offset_bottom = 33.0
-color = Color(1, 0.23, 0.23, 1)
+[node name="1" type="Sprite2D" parent="ui/magic/Spellslots1/slot1"]
+visible = false
+position = Vector2(0.0541534, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
 
-[node name="keys" type="Node2D" parent="ui/magic/Spellslots/slot1"]
-modulate = Color(0, 0, 0, 1)
+[node name="2" type="Sprite2D" parent="ui/magic/Spellslots1/slot1"]
+visible = false
+position = Vector2(0.0541534, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
+frame = 1
+
+[node name="3" type="Sprite2D" parent="ui/magic/Spellslots1/slot1"]
+visible = false
+position = Vector2(0.0541534, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
+frame = 2
+
+[node name="4" type="Sprite2D" parent="ui/magic/Spellslots1/slot1"]
+visible = false
+position = Vector2(0.0541534, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
+frame = 3
+
+[node name="keys" type="Node2D" parent="ui/magic/Spellslots1/slot1"]
+modulate = Color(0.44185, 0.44185, 0.44185, 1)
 position = Vector2(-1, -1)
 
-[node name="1" type="Sprite2D" parent="ui/magic/Spellslots/slot1/keys"]
+[node name="1" type="Label" parent="ui/magic/Spellslots1/slot1/keys"]
 visible = false
-position = Vector2(1, 1)
-scale = Vector2(3, 3)
-texture = ExtResource("5_8587g")
+material = SubResource("ShaderMaterial_cshsq")
+offset_left = -8.77917
+offset_top = -31.0208
+offset_right = 31.2208
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "1"
 
-[node name="2" type="Sprite2D" parent="ui/magic/Spellslots/slot1/keys"]
+[node name="2" type="Label" parent="ui/magic/Spellslots1/slot1/keys"]
 visible = false
-position = Vector2(1, 1)
-scale = Vector2(3, 3)
-texture = ExtResource("6_ustib")
+material = SubResource("ShaderMaterial_fp1p4")
+offset_left = -11.8813
+offset_top = -31.0208
+offset_right = 28.1187
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "2"
 
-[node name="3" type="Sprite2D" parent="ui/magic/Spellslots/slot1/keys"]
-position = Vector2(1, 1)
-scale = Vector2(3, 3)
-texture = ExtResource("7_xw07i")
-
-[node name="4" type="Sprite2D" parent="ui/magic/Spellslots/slot1/keys"]
+[node name="3" type="Label" parent="ui/magic/Spellslots1/slot1/keys"]
 visible = false
-position = Vector2(1, 1)
-scale = Vector2(3, 3)
-texture = ExtResource("8_q4npa")
+material = SubResource("ShaderMaterial_kdyf4")
+offset_left = -11.8813
+offset_top = -31.0208
+offset_right = 28.1187
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "3"
 
-[node name="slot2" type="Node2D" parent="ui/magic/Spellslots"]
+[node name="4" type="Label" parent="ui/magic/Spellslots1/slot1/keys"]
+visible = false
+material = SubResource("ShaderMaterial_i1a2u")
+offset_left = -11.8813
+offset_top = -31.0208
+offset_right = 28.1187
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "4"
+
+[node name="slot2" type="Node2D" parent="ui/magic/Spellslots1"]
 position = Vector2(-429, 1)
 
-[node name="ColorRect" type="ColorRect" parent="ui/magic/Spellslots/slot2"]
-offset_left = -36.0
-offset_top = -36.0
-offset_right = 34.0
-offset_bottom = 33.0
-color = Color(1, 0.23, 0.23, 1)
+[node name="1" type="Sprite2D" parent="ui/magic/Spellslots1/slot2"]
+visible = false
+position = Vector2(0.0541687, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
 
-[node name="keys" type="Node2D" parent="ui/magic/Spellslots/slot2"]
+[node name="2" type="Sprite2D" parent="ui/magic/Spellslots1/slot2"]
+visible = false
+position = Vector2(0.0541687, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
+frame = 1
+
+[node name="3" type="Sprite2D" parent="ui/magic/Spellslots1/slot2"]
+visible = false
+position = Vector2(0.0541687, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
+frame = 2
+
+[node name="4" type="Sprite2D" parent="ui/magic/Spellslots1/slot2"]
+visible = false
+position = Vector2(0.0541687, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
+frame = 3
+
+[node name="keys" type="Node2D" parent="ui/magic/Spellslots1/slot2"]
 modulate = Color(0, 0, 0, 1)
 position = Vector2(-1, -1)
 
-[node name="1" type="Sprite2D" parent="ui/magic/Spellslots/slot2/keys"]
+[node name="1" type="Label" parent="ui/magic/Spellslots1/slot2/keys"]
 visible = false
-position = Vector2(1, 1)
-scale = Vector2(3, 3)
-texture = ExtResource("5_8587g")
+material = SubResource("ShaderMaterial_p62pb")
+offset_left = -8.77917
+offset_top = -31.0208
+offset_right = 31.2208
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "1"
 
-[node name="2" type="Sprite2D" parent="ui/magic/Spellslots/slot2/keys"]
+[node name="2" type="Label" parent="ui/magic/Spellslots1/slot2/keys"]
 visible = false
-position = Vector2(1, 1)
-scale = Vector2(3, 3)
-texture = ExtResource("6_ustib")
+material = SubResource("ShaderMaterial_gekke")
+offset_left = -11.8813
+offset_top = -31.0208
+offset_right = 28.1187
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "2"
 
-[node name="3" type="Sprite2D" parent="ui/magic/Spellslots/slot2/keys"]
-position = Vector2(1, 1)
-scale = Vector2(3, 3)
-texture = ExtResource("7_xw07i")
-
-[node name="4" type="Sprite2D" parent="ui/magic/Spellslots/slot2/keys"]
+[node name="3" type="Label" parent="ui/magic/Spellslots1/slot2/keys"]
 visible = false
-position = Vector2(1, 1)
-scale = Vector2(3, 3)
-texture = ExtResource("8_q4npa")
+material = SubResource("ShaderMaterial_xi4gh")
+offset_left = -11.8813
+offset_top = -31.0208
+offset_right = 28.1187
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "3"
 
-[node name="slot3" type="Node2D" parent="ui/magic/Spellslots"]
+[node name="4" type="Label" parent="ui/magic/Spellslots1/slot2/keys"]
+visible = false
+material = SubResource("ShaderMaterial_i361x")
+offset_left = -11.8813
+offset_top = -31.0208
+offset_right = 28.1187
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "4"
+
+[node name="slot3" type="Node2D" parent="ui/magic/Spellslots1"]
 position = Vector2(-343, 1)
 
-[node name="ColorRect" type="ColorRect" parent="ui/magic/Spellslots/slot3"]
-offset_left = -36.0
-offset_top = -36.0
-offset_right = 34.0
-offset_bottom = 33.0
-color = Color(0.509804, 0.729412, 0.101961, 1)
+[node name="1" type="Sprite2D" parent="ui/magic/Spellslots1/slot3"]
+visible = false
+position = Vector2(0.0541382, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
 
-[node name="keys" type="Node2D" parent="ui/magic/Spellslots/slot3"]
+[node name="2" type="Sprite2D" parent="ui/magic/Spellslots1/slot3"]
+visible = false
+position = Vector2(0.0541382, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
+frame = 1
+
+[node name="3" type="Sprite2D" parent="ui/magic/Spellslots1/slot3"]
+visible = false
+position = Vector2(0.0541382, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
+frame = 2
+
+[node name="4" type="Sprite2D" parent="ui/magic/Spellslots1/slot3"]
+visible = false
+position = Vector2(0.0541382, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
+frame = 3
+
+[node name="keys" type="Node2D" parent="ui/magic/Spellslots1/slot3"]
 modulate = Color(0, 0, 0, 1)
+material = SubResource("ShaderMaterial_urpvf")
 position = Vector2(-1, -1)
 
-[node name="1" type="Sprite2D" parent="ui/magic/Spellslots/slot3/keys"]
-position = Vector2(1, 1)
-scale = Vector2(3, 3)
-texture = ExtResource("5_8587g")
+[node name="1" type="Label" parent="ui/magic/Spellslots1/slot3/keys"]
+material = SubResource("ShaderMaterial_x3ap7")
+offset_left = -8.77917
+offset_top = -31.0208
+offset_right = 31.2208
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "1"
 
-[node name="2" type="Sprite2D" parent="ui/magic/Spellslots/slot3/keys"]
+[node name="2" type="Label" parent="ui/magic/Spellslots1/slot3/keys"]
 visible = false
-position = Vector2(1, 1)
-scale = Vector2(3, 3)
-texture = ExtResource("6_ustib")
+material = SubResource("ShaderMaterial_x3ap7")
+offset_left = -11.8813
+offset_top = -31.0208
+offset_right = 28.1187
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "2"
 
-[node name="3" type="Sprite2D" parent="ui/magic/Spellslots/slot3/keys"]
+[node name="3" type="Label" parent="ui/magic/Spellslots1/slot3/keys"]
 visible = false
-position = Vector2(1, 1)
-scale = Vector2(3, 3)
-texture = ExtResource("7_xw07i")
+material = SubResource("ShaderMaterial_x3ap7")
+offset_left = -11.8813
+offset_top = -31.0208
+offset_right = 28.1187
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "3"
 
-[node name="4" type="Sprite2D" parent="ui/magic/Spellslots/slot3/keys"]
+[node name="4" type="Label" parent="ui/magic/Spellslots1/slot3/keys"]
 visible = false
-position = Vector2(1, 1)
-scale = Vector2(3, 3)
-texture = ExtResource("8_q4npa")
+material = SubResource("ShaderMaterial_x3ap7")
+offset_left = -11.8813
+offset_top = -31.0208
+offset_right = 28.1187
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "4"
 
-[node name="slot4" type="Node2D" parent="ui/magic/Spellslots"]
-visible = false
+[node name="slot4" type="Node2D" parent="ui/magic/Spellslots1"]
 position = Vector2(-257, 1)
 
-[node name="ColorRect" type="ColorRect" parent="ui/magic/Spellslots/slot4"]
-offset_left = -36.0
-offset_top = -36.0
-offset_right = 34.0
-offset_bottom = 33.0
+[node name="1" type="Sprite2D" parent="ui/magic/Spellslots1/slot4"]
+visible = false
+position = Vector2(0.0541382, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
 
-[node name="keys" type="Node2D" parent="ui/magic/Spellslots/slot4"]
+[node name="2" type="Sprite2D" parent="ui/magic/Spellslots1/slot4"]
+visible = false
+position = Vector2(0.0541382, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
+frame = 1
+
+[node name="3" type="Sprite2D" parent="ui/magic/Spellslots1/slot4"]
+visible = false
+position = Vector2(0.0541382, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
+frame = 2
+
+[node name="4" type="Sprite2D" parent="ui/magic/Spellslots1/slot4"]
+visible = false
+position = Vector2(0.0541382, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
+frame = 3
+
+[node name="keys" type="Node2D" parent="ui/magic/Spellslots1/slot4"]
 modulate = Color(0, 0, 0, 1)
 position = Vector2(-1, -1)
 
-[node name="1" type="Sprite2D" parent="ui/magic/Spellslots/slot4/keys"]
+[node name="1" type="Label" parent="ui/magic/Spellslots1/slot4/keys"]
 visible = false
-position = Vector2(1, 1)
-scale = Vector2(3, 3)
-texture = ExtResource("5_8587g")
-
-[node name="2" type="Sprite2D" parent="ui/magic/Spellslots/slot4/keys"]
-visible = false
-position = Vector2(1, 1)
-scale = Vector2(3, 3)
-texture = ExtResource("6_ustib")
-
-[node name="3" type="Sprite2D" parent="ui/magic/Spellslots/slot4/keys"]
-position = Vector2(1, 1)
-scale = Vector2(3, 3)
-texture = ExtResource("7_xw07i")
-
-[node name="4" type="Sprite2D" parent="ui/magic/Spellslots/slot4/keys"]
-visible = false
-position = Vector2(1, 1)
-scale = Vector2(3, 3)
-texture = ExtResource("8_q4npa")
-
-[node name="ColorRect" type="ColorRect" parent="ui"]
-visible = false
-offset_left = 144.0
-offset_top = 53.0
-offset_right = 184.0
-offset_bottom = 93.0
-scale = Vector2(4.89506, 3.51253)
-
-[node name="Label" type="Label" parent="ui/ColorRect"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
+material = ExtResource("11_6kjg3")
+offset_left = -8.77917
+offset_top = -31.0208
+offset_right = 31.2208
+offset_bottom = 28.9792
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "craft"
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "1"
+
+[node name="2" type="Label" parent="ui/magic/Spellslots1/slot4/keys"]
+visible = false
+material = ExtResource("11_6kjg3")
+offset_left = -11.8813
+offset_top = -31.0208
+offset_right = 28.1187
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "2"
+
+[node name="3" type="Label" parent="ui/magic/Spellslots1/slot4/keys"]
+visible = false
+material = ExtResource("11_6kjg3")
+offset_left = -11.8813
+offset_top = -31.0208
+offset_right = 28.1187
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "3"
+
+[node name="4" type="Label" parent="ui/magic/Spellslots1/slot4/keys"]
+visible = false
+material = ExtResource("11_6kjg3")
+offset_left = -11.8813
+offset_top = -31.0208
+offset_right = 28.1187
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "4"
+
+[node name="nametag" type="ColorRect" parent="ui/magic/Spellslots1"]
+visible = false
+offset_left = -549.0
+offset_top = -81.0
+offset_right = -334.0
+offset_bottom = -41.0
+color = Color(0, 0, 0, 1)
+
+[node name="Label" type="Label" parent="ui/magic/Spellslots1/nametag"]
+layout_mode = 0
+offset_left = 12.3396
+offset_top = -2.75626
+offset_right = 176.34
+offset_bottom = 47.2437
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 64
+
+[node name="Spellslots2" type="Node2D" parent="ui/magic" node_paths=PackedStringArray("key_input_label")]
+position = Vector2(370, 249)
+scale = Vector2(0.322364, 0.322364)
+script = ExtResource("7_87xio")
+key_input_label = NodePath("../../Label")
+
+[node name="slot1" type="Node2D" parent="ui/magic/Spellslots2"]
+position = Vector2(-515, 1)
+
+[node name="1" type="Sprite2D" parent="ui/magic/Spellslots2/slot1"]
+visible = false
+position = Vector2(0.0541534, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
+
+[node name="2" type="Sprite2D" parent="ui/magic/Spellslots2/slot1"]
+visible = false
+position = Vector2(0.0541534, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
+frame = 1
+
+[node name="3" type="Sprite2D" parent="ui/magic/Spellslots2/slot1"]
+visible = false
+position = Vector2(0.0541534, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
+frame = 2
+
+[node name="4" type="Sprite2D" parent="ui/magic/Spellslots2/slot1"]
+visible = false
+position = Vector2(0.0541534, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
+frame = 3
+
+[node name="keys" type="Node2D" parent="ui/magic/Spellslots2/slot1"]
+modulate = Color(0.44185, 0.44185, 0.44185, 1)
+position = Vector2(-1, -1)
+
+[node name="1" type="Label" parent="ui/magic/Spellslots2/slot1/keys"]
+visible = false
+material = SubResource("ShaderMaterial_abhmq")
+offset_left = -8.77917
+offset_top = -31.0208
+offset_right = 31.2208
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "1"
+
+[node name="2" type="Label" parent="ui/magic/Spellslots2/slot1/keys"]
+visible = false
+material = SubResource("ShaderMaterial_abhmq")
+offset_left = -11.8813
+offset_top = -31.0208
+offset_right = 28.1187
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "2"
+
+[node name="3" type="Label" parent="ui/magic/Spellslots2/slot1/keys"]
+visible = false
+material = SubResource("ShaderMaterial_abhmq")
+offset_left = -11.8813
+offset_top = -31.0208
+offset_right = 28.1187
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "3"
+
+[node name="4" type="Label" parent="ui/magic/Spellslots2/slot1/keys"]
+visible = false
+material = SubResource("ShaderMaterial_abhmq")
+offset_left = -11.8813
+offset_top = -31.0208
+offset_right = 28.1187
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "4"
+
+[node name="slot2" type="Node2D" parent="ui/magic/Spellslots2"]
+position = Vector2(-429, 1)
+
+[node name="1" type="Sprite2D" parent="ui/magic/Spellslots2/slot2"]
+visible = false
+position = Vector2(0.0541687, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
+
+[node name="2" type="Sprite2D" parent="ui/magic/Spellslots2/slot2"]
+visible = false
+position = Vector2(0.0541687, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
+frame = 1
+
+[node name="3" type="Sprite2D" parent="ui/magic/Spellslots2/slot2"]
+visible = false
+position = Vector2(0.0541687, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
+frame = 2
+
+[node name="4" type="Sprite2D" parent="ui/magic/Spellslots2/slot2"]
+visible = false
+position = Vector2(0.0541687, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
+frame = 3
+
+[node name="keys" type="Node2D" parent="ui/magic/Spellslots2/slot2"]
+modulate = Color(0, 0, 0, 1)
+position = Vector2(-1, -1)
+
+[node name="1" type="Label" parent="ui/magic/Spellslots2/slot2/keys"]
+visible = false
+material = SubResource("ShaderMaterial_0kdyf")
+offset_left = -8.77917
+offset_top = -31.0208
+offset_right = 31.2208
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "1"
+
+[node name="2" type="Label" parent="ui/magic/Spellslots2/slot2/keys"]
+visible = false
+material = SubResource("ShaderMaterial_0kdyf")
+offset_left = -11.8813
+offset_top = -31.0208
+offset_right = 28.1187
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "2"
+
+[node name="3" type="Label" parent="ui/magic/Spellslots2/slot2/keys"]
+visible = false
+material = SubResource("ShaderMaterial_0kdyf")
+offset_left = -11.8813
+offset_top = -31.0208
+offset_right = 28.1187
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "3"
+
+[node name="4" type="Label" parent="ui/magic/Spellslots2/slot2/keys"]
+visible = false
+material = SubResource("ShaderMaterial_0kdyf")
+offset_left = -11.8813
+offset_top = -31.0208
+offset_right = 28.1187
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "4"
+
+[node name="slot3" type="Node2D" parent="ui/magic/Spellslots2"]
+position = Vector2(-343, 1)
+
+[node name="1" type="Sprite2D" parent="ui/magic/Spellslots2/slot3"]
+visible = false
+position = Vector2(0.0541382, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
+
+[node name="2" type="Sprite2D" parent="ui/magic/Spellslots2/slot3"]
+visible = false
+position = Vector2(0.0541382, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
+frame = 1
+
+[node name="3" type="Sprite2D" parent="ui/magic/Spellslots2/slot3"]
+visible = false
+position = Vector2(0.0541382, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
+frame = 2
+
+[node name="4" type="Sprite2D" parent="ui/magic/Spellslots2/slot3"]
+visible = false
+position = Vector2(0.0541382, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
+frame = 3
+
+[node name="keys" type="Node2D" parent="ui/magic/Spellslots2/slot3"]
+modulate = Color(0, 0, 0, 1)
+position = Vector2(-1, -1)
+
+[node name="1" type="Label" parent="ui/magic/Spellslots2/slot3/keys"]
+visible = false
+material = SubResource("ShaderMaterial_5pb5q")
+offset_left = -8.77917
+offset_top = -31.0208
+offset_right = 31.2208
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "1"
+
+[node name="2" type="Label" parent="ui/magic/Spellslots2/slot3/keys"]
+visible = false
+material = SubResource("ShaderMaterial_5pb5q")
+offset_left = -11.8813
+offset_top = -31.0208
+offset_right = 28.1187
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "2"
+
+[node name="3" type="Label" parent="ui/magic/Spellslots2/slot3/keys"]
+visible = false
+material = SubResource("ShaderMaterial_5pb5q")
+offset_left = -11.8813
+offset_top = -31.0208
+offset_right = 28.1187
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "3"
+
+[node name="4" type="Label" parent="ui/magic/Spellslots2/slot3/keys"]
+visible = false
+material = SubResource("ShaderMaterial_5pb5q")
+offset_left = -11.8813
+offset_top = -31.0208
+offset_right = 28.1187
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "4"
+
+[node name="slot4" type="Node2D" parent="ui/magic/Spellslots2"]
+position = Vector2(-257, 1)
+
+[node name="1" type="Sprite2D" parent="ui/magic/Spellslots2/slot4"]
+visible = false
+position = Vector2(0.0541382, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
+
+[node name="2" type="Sprite2D" parent="ui/magic/Spellslots2/slot4"]
+visible = false
+position = Vector2(0.0541382, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
+frame = 1
+
+[node name="3" type="Sprite2D" parent="ui/magic/Spellslots2/slot4"]
+visible = false
+position = Vector2(0.0541382, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
+frame = 2
+
+[node name="4" type="Sprite2D" parent="ui/magic/Spellslots2/slot4"]
+visible = false
+position = Vector2(0.0541382, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
+frame = 3
+
+[node name="keys" type="Node2D" parent="ui/magic/Spellslots2/slot4"]
+modulate = Color(0, 0, 0, 1)
+position = Vector2(-1, -1)
+
+[node name="1" type="Label" parent="ui/magic/Spellslots2/slot4/keys"]
+visible = false
+material = SubResource("ShaderMaterial_umx5m")
+offset_left = -8.77917
+offset_top = -31.0208
+offset_right = 31.2208
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "1"
+
+[node name="2" type="Label" parent="ui/magic/Spellslots2/slot4/keys"]
+visible = false
+material = SubResource("ShaderMaterial_umx5m")
+offset_left = -11.8813
+offset_top = -31.0208
+offset_right = 28.1187
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "2"
+
+[node name="3" type="Label" parent="ui/magic/Spellslots2/slot4/keys"]
+visible = false
+material = SubResource("ShaderMaterial_umx5m")
+offset_left = -11.8813
+offset_top = -31.0208
+offset_right = 28.1187
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "3"
+
+[node name="4" type="Label" parent="ui/magic/Spellslots2/slot4/keys"]
+visible = false
+material = SubResource("ShaderMaterial_umx5m")
+offset_left = -11.8813
+offset_top = -31.0208
+offset_right = 28.1187
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "4"
+
+[node name="nametag" type="ColorRect" parent="ui/magic/Spellslots2"]
+visible = false
+offset_left = -549.0
+offset_top = -81.0
+offset_right = -334.0
+offset_bottom = -41.0
+color = Color(0, 0, 0, 1)
+
+[node name="Label" type="Label" parent="ui/magic/Spellslots2/nametag"]
+layout_mode = 0
+offset_left = 12.3396
+offset_top = -2.75626
+offset_right = 176.34
+offset_bottom = 47.2437
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 64
+
+[node name="Spellslots3" type="Node2D" parent="ui/magic" node_paths=PackedStringArray("key_input_label")]
+position = Vector2(496, 249)
+scale = Vector2(0.322364, 0.322364)
+script = ExtResource("7_87xio")
+key_input_label = NodePath("../../Label")
+
+[node name="slot1" type="Node2D" parent="ui/magic/Spellslots3"]
+position = Vector2(-515, 1)
+
+[node name="1" type="Sprite2D" parent="ui/magic/Spellslots3/slot1"]
+visible = false
+position = Vector2(0.0541534, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
+
+[node name="2" type="Sprite2D" parent="ui/magic/Spellslots3/slot1"]
+visible = false
+position = Vector2(0.0541534, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
+frame = 1
+
+[node name="3" type="Sprite2D" parent="ui/magic/Spellslots3/slot1"]
+visible = false
+position = Vector2(0.0541534, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
+frame = 2
+
+[node name="4" type="Sprite2D" parent="ui/magic/Spellslots3/slot1"]
+visible = false
+position = Vector2(0.0541534, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
+frame = 3
+
+[node name="keys" type="Node2D" parent="ui/magic/Spellslots3/slot1"]
+modulate = Color(0.44185, 0.44185, 0.44185, 1)
+position = Vector2(-1, -1)
+
+[node name="1" type="Label" parent="ui/magic/Spellslots3/slot1/keys"]
+visible = false
+material = SubResource("ShaderMaterial_ksdrx")
+offset_left = -8.77917
+offset_top = -31.0208
+offset_right = 31.2208
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "1"
+
+[node name="2" type="Label" parent="ui/magic/Spellslots3/slot1/keys"]
+visible = false
+material = SubResource("ShaderMaterial_ksdrx")
+offset_left = -11.8813
+offset_top = -31.0208
+offset_right = 28.1187
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "2"
+
+[node name="3" type="Label" parent="ui/magic/Spellslots3/slot1/keys"]
+visible = false
+material = SubResource("ShaderMaterial_ksdrx")
+offset_left = -11.8813
+offset_top = -31.0208
+offset_right = 28.1187
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "3"
+
+[node name="4" type="Label" parent="ui/magic/Spellslots3/slot1/keys"]
+visible = false
+material = SubResource("ShaderMaterial_ksdrx")
+offset_left = -11.8813
+offset_top = -31.0208
+offset_right = 28.1187
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "4"
+
+[node name="slot2" type="Node2D" parent="ui/magic/Spellslots3"]
+position = Vector2(-429, 1)
+
+[node name="1" type="Sprite2D" parent="ui/magic/Spellslots3/slot2"]
+visible = false
+position = Vector2(0.0541687, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
+
+[node name="2" type="Sprite2D" parent="ui/magic/Spellslots3/slot2"]
+visible = false
+position = Vector2(0.0541687, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
+frame = 1
+
+[node name="3" type="Sprite2D" parent="ui/magic/Spellslots3/slot2"]
+visible = false
+position = Vector2(0.0541687, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
+frame = 2
+
+[node name="4" type="Sprite2D" parent="ui/magic/Spellslots3/slot2"]
+visible = false
+position = Vector2(0.0541687, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
+frame = 3
+
+[node name="keys" type="Node2D" parent="ui/magic/Spellslots3/slot2"]
+modulate = Color(0, 0, 0, 1)
+position = Vector2(-1, -1)
+
+[node name="1" type="Label" parent="ui/magic/Spellslots3/slot2/keys"]
+visible = false
+material = SubResource("ShaderMaterial_srgeu")
+offset_left = -8.77917
+offset_top = -31.0208
+offset_right = 31.2208
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "1"
+
+[node name="2" type="Label" parent="ui/magic/Spellslots3/slot2/keys"]
+visible = false
+material = SubResource("ShaderMaterial_srgeu")
+offset_left = -11.8813
+offset_top = -31.0208
+offset_right = 28.1187
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "2"
+
+[node name="3" type="Label" parent="ui/magic/Spellslots3/slot2/keys"]
+visible = false
+material = SubResource("ShaderMaterial_srgeu")
+offset_left = -11.8813
+offset_top = -31.0208
+offset_right = 28.1187
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "3"
+
+[node name="4" type="Label" parent="ui/magic/Spellslots3/slot2/keys"]
+visible = false
+material = SubResource("ShaderMaterial_srgeu")
+offset_left = -11.8813
+offset_top = -31.0208
+offset_right = 28.1187
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "4"
+
+[node name="slot3" type="Node2D" parent="ui/magic/Spellslots3"]
+position = Vector2(-343, 1)
+
+[node name="1" type="Sprite2D" parent="ui/magic/Spellslots3/slot3"]
+visible = false
+position = Vector2(0.0541382, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
+
+[node name="2" type="Sprite2D" parent="ui/magic/Spellslots3/slot3"]
+visible = false
+position = Vector2(0.0541382, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
+frame = 1
+
+[node name="3" type="Sprite2D" parent="ui/magic/Spellslots3/slot3"]
+visible = false
+position = Vector2(0.0541382, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
+frame = 2
+
+[node name="4" type="Sprite2D" parent="ui/magic/Spellslots3/slot3"]
+visible = false
+position = Vector2(0.0541382, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
+frame = 3
+
+[node name="keys" type="Node2D" parent="ui/magic/Spellslots3/slot3"]
+modulate = Color(0, 0, 0, 1)
+position = Vector2(-1, -1)
+
+[node name="1" type="Label" parent="ui/magic/Spellslots3/slot3/keys"]
+visible = false
+material = SubResource("ShaderMaterial_u7v5r")
+offset_left = -8.77917
+offset_top = -31.0208
+offset_right = 31.2208
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "1"
+
+[node name="2" type="Label" parent="ui/magic/Spellslots3/slot3/keys"]
+visible = false
+material = SubResource("ShaderMaterial_u7v5r")
+offset_left = -11.8813
+offset_top = -31.0208
+offset_right = 28.1187
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "2"
+
+[node name="3" type="Label" parent="ui/magic/Spellslots3/slot3/keys"]
+visible = false
+material = SubResource("ShaderMaterial_u7v5r")
+offset_left = -11.8813
+offset_top = -31.0208
+offset_right = 28.1187
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "3"
+
+[node name="4" type="Label" parent="ui/magic/Spellslots3/slot3/keys"]
+visible = false
+material = SubResource("ShaderMaterial_u7v5r")
+offset_left = -11.8813
+offset_top = -31.0208
+offset_right = 28.1187
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "4"
+
+[node name="slot4" type="Node2D" parent="ui/magic/Spellslots3"]
+position = Vector2(-257, 1)
+
+[node name="1" type="Sprite2D" parent="ui/magic/Spellslots3/slot4"]
+visible = false
+position = Vector2(0.0541382, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
+
+[node name="2" type="Sprite2D" parent="ui/magic/Spellslots3/slot4"]
+visible = false
+position = Vector2(0.0541382, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
+frame = 1
+
+[node name="3" type="Sprite2D" parent="ui/magic/Spellslots3/slot4"]
+visible = false
+position = Vector2(0.0541382, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
+frame = 2
+
+[node name="4" type="Sprite2D" parent="ui/magic/Spellslots3/slot4"]
+visible = false
+position = Vector2(0.0541382, -1)
+scale = Vector2(3.10208, 3.10208)
+texture = ExtResource("11_1uc7j")
+hframes = 4
+frame = 3
+
+[node name="keys" type="Node2D" parent="ui/magic/Spellslots3/slot4"]
+modulate = Color(0, 0, 0, 1)
+position = Vector2(-1, -1)
+
+[node name="1" type="Label" parent="ui/magic/Spellslots3/slot4/keys"]
+visible = false
+material = SubResource("ShaderMaterial_c5rp7")
+offset_left = -8.77917
+offset_top = -31.0208
+offset_right = 31.2208
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "1"
+
+[node name="2" type="Label" parent="ui/magic/Spellslots3/slot4/keys"]
+visible = false
+material = SubResource("ShaderMaterial_c5rp7")
+offset_left = -11.8813
+offset_top = -31.0208
+offset_right = 28.1187
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "2"
+
+[node name="3" type="Label" parent="ui/magic/Spellslots3/slot4/keys"]
+visible = false
+material = SubResource("ShaderMaterial_c5rp7")
+offset_left = -11.8813
+offset_top = -31.0208
+offset_right = 28.1187
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "3"
+
+[node name="4" type="Label" parent="ui/magic/Spellslots3/slot4/keys"]
+visible = false
+material = SubResource("ShaderMaterial_c5rp7")
+offset_left = -11.8813
+offset_top = -31.0208
+offset_right = 28.1187
+offset_bottom = 28.9792
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 80
+text = "4"
+
+[node name="nametag" type="ColorRect" parent="ui/magic/Spellslots3"]
+visible = false
+offset_left = -549.0
+offset_top = -81.0
+offset_right = -334.0
+offset_bottom = -41.0
+color = Color(0, 0, 0, 1)
+
+[node name="Label" type="Label" parent="ui/magic/Spellslots3/nametag"]
+layout_mode = 0
+offset_left = 12.3396
+offset_top = -2.75626
+offset_right = 176.34
+offset_bottom = 47.2437
+theme_override_fonts/font = ExtResource("16_8swc5")
+theme_override_font_sizes/font_size = 64
 
 [node name="fade" type="ColorRect" parent="ui"]
 modulate = Color(1, 1, 1, 0)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = 3.0
+offset_bottom = 3.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
@@ -426,3 +1832,10 @@ libraries = {
 
 [node name="recticle" type="Sprite2D" parent="ui"]
 texture = ExtResource("15_nspx7")
+
+[node name="fist" type="Sprite2D" parent="ui"]
+texture = ExtResource("16_gjoyt")
+
+[node name="music_dungeon" type="AudioStreamPlayer" parent="."]
+
+[node name="music_camp" type="AudioStreamPlayer" parent="."]

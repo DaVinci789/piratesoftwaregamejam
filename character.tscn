@@ -1,9 +1,8 @@
-[gd_scene load_steps=66 format=3 uid="uid://cdudyaojxmf5b"]
+[gd_scene load_steps=65 format=3 uid="uid://cdudyaojxmf5b"]
 
 [ext_resource type="Script" path="res://character.gd" id="1_4yr1q"]
 [ext_resource type="Material" uid="uid://6rno7n4h3tmh" path="res://pixelscaling.tres" id="2_pha7q"]
-[ext_resource type="PackedScene" uid="uid://cbj2wmtri6qc5" path="res://spells/fireball.tscn" id="2_uc1on"]
-[ext_resource type="PackedScene" uid="uid://bvo64t00m7ruu" path="res://spells/earthshock.tscn" id="3_ju5kq"]
+[ext_resource type="Texture2D" uid="uid://b68pee8i4xib7" path="res://assets/neutral_light.webp" id="4_e4b6u"]
 [ext_resource type="Texture2D" uid="uid://1e7tyjde6y50" path="res://assets/spritesheet_character.png" id="4_kdo6s"]
 
 [sub_resource type="Animation" id="Animation_m7d4g"]
@@ -30,7 +29,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [true]
+"values": [false]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -492,7 +491,7 @@ blend_mode = 1
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_d4k0q"]
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_0plq2"]
-graph_offset = Vector2(-241.25, -97.5)
+graph_offset = Vector2(-285, -43.75)
 nodes/BlendSpace2D/node = SubResource("AnimationNodeBlendSpace2D_by7nj")
 nodes/BlendSpace2D/position = Vector2(-150, 50)
 nodes/TimeScale/node = SubResource("AnimationNodeTimeScale_d4k0q")
@@ -618,7 +617,7 @@ DASH_DURATION_SECONDS = 0.13
 DASH_LENGTH = 550
 INTERACT_DISTANCE = 200
 ELEMENT_INPUT_TIMEOUT = 1.15
-spell_scenes = Array[PackedScene]([ExtResource("2_uc1on"), ExtResource("3_ju5kq")])
+spells = Array[String](["fireball", "earthshock", "shield"])
 
 [node name="cameratarget" type="Marker2D" parent="."]
 
@@ -626,7 +625,6 @@ spell_scenes = Array[PackedScene]([ExtResource("2_uc1on"), ExtResource("3_ju5kq"
 texture_filter = 2
 material = ExtResource("2_pha7q")
 texture = ExtResource("4_kdo6s")
-flip_h = true
 hframes = 39
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
@@ -650,6 +648,7 @@ parameters/slash/TimeScale/scale = 1.0
 one_shot = true
 
 [node name="environmental_collision_box" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2(0, -1.5)
 shape = SubResource("RectangleShape2D_8ggmo")
 
@@ -657,6 +656,7 @@ shape = SubResource("RectangleShape2D_8ggmo")
 target_position = Vector2(0, 41)
 
 [node name="slash_hitbox_up" type="Area2D" parent="."]
+visible = false
 position = Vector2(0, -15)
 collision_layer = 8
 collision_mask = 33
@@ -667,6 +667,7 @@ position = Vector2(-0.5, -6.5)
 shape = SubResource("RectangleShape2D_6k6xv")
 
 [node name="slash_hitbox_left" type="Area2D" parent="."]
+visible = false
 collision_layer = 8
 collision_mask = 33
 monitoring = false
@@ -676,6 +677,7 @@ position = Vector2(-26, -1)
 shape = SubResource("RectangleShape2D_kq7ov")
 
 [node name="slash_hitbox_right" type="Area2D" parent="."]
+visible = false
 position = Vector2(32, -10)
 collision_layer = 8
 collision_mask = 33
@@ -686,6 +688,7 @@ position = Vector2(-9, 10.5)
 shape = SubResource("RectangleShape2D_hu5mj")
 
 [node name="slash_hitbox_down" type="Area2D" parent="."]
+visible = false
 collision_layer = 8
 collision_mask = 33
 monitoring = false
@@ -695,6 +698,18 @@ position = Vector2(0.5, 19.5)
 shape = SubResource("RectangleShape2D_1ku4o")
 
 [node name="slash" type="AudioStreamPlayer" parent="."]
+
+[node name="dash" type="AudioStreamPlayer" parent="."]
+
+[node name="footsteps" type="AudioStreamPlayer" parent="."]
+
+[node name="elemental_input" type="AudioStreamPlayer" parent="."]
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+position = Vector2(-0.999996, -0.999996)
+scale = Vector2(1.40625, 1.40625)
+shadow_enabled = true
+texture = ExtResource("4_e4b6u")
 
 [connection signal="timeout" from="element_input_timeout" to="." method="_on_element_input_timeout_timeout"]
 [connection signal="area_entered" from="slash_hitbox_up" to="." method="_on_slash_hitbox_up_area_entered"]

@@ -1,12 +1,14 @@
-[gd_scene load_steps=9 format=3 uid="uid://cbj2wmtri6qc5"]
+[gd_scene load_steps=10 format=3 uid="uid://cbj2wmtri6qc5"]
 
 [ext_resource type="Script" path="res://spells/fireball.gd" id="1_a3857"]
-[ext_resource type="Texture2D" uid="uid://dxwcjwjkl6dw8" path="res://icon.svg" id="1_ieigf"]
+[ext_resource type="Resource" uid="uid://b0auhq0uvo6lg" path="res://spells/fireball.tres" id="2_bniw8"]
 [ext_resource type="Shader" path="res://flash.gdshader" id="2_kq7qg"]
+[ext_resource type="Texture2D" uid="uid://c5undktlvwpo4" path="res://assets/fireball.png" id="4_ctckl"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_4jir3"]
 shader = ExtResource("2_kq7qg")
 shader_parameter/enable = false
+shader_parameter/sensitivity = 0.0
 
 [sub_resource type="Animation" id="Animation_14xyd"]
 length = 0.001
@@ -51,14 +53,15 @@ size = Vector2(43, 13)
 
 [node name="fireball" type="CharacterBody2D"]
 collision_layer = 0
-collision_mask = 0
 script = ExtResource("1_a3857")
+SPEED = 800
+cost = ExtResource("2_bniw8")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 material = SubResource("ShaderMaterial_4jir3")
 position = Vector2(-0.499998, 0.5)
-scale = Vector2(0.351563, 0.117188)
-texture = ExtResource("1_ieigf")
+rotation = 4.71239
+texture = ExtResource("4_ctckl")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 unique_name_in_owner = true
@@ -79,6 +82,8 @@ collision_mask = 33
 [node name="CollisionShape2D" type="CollisionShape2D" parent="hitbox"]
 position = Vector2(-0.5, 0.5)
 shape = SubResource("RectangleShape2D_8iha8")
+
+[node name="sfx" type="AudioStreamPlayer" parent="."]
 
 [connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]
 [connection signal="area_entered" from="hitbox" to="." method="_on_hitbox_area_entered"]

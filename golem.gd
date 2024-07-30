@@ -14,23 +14,42 @@ extends CharacterBody2D
 		debug_dashing = false
 
 @export_group("Parameters")
-@export var ACTIVE := false
+@export var ACTIVE := false:
+	set(value):
+		if HP <= 0:
+			ACTIVE = false
+		else:
+			ACTIVE = value
+		return
 @export var action_state := ACTION_STATES.Idle
 @export var BASE_SPEED := 20
 @export var HP: float = 3.0:
 	set(value):
 		HP = value
-		$hp_label_temp.text = "HP: " + str(value)
+		if HP > 0:
+			if current_hp_sprite:
+				for child: Node2D in current_hp_sprite.get_children():
+					child.visible = false
+				for child: Node2D in current_hp_sprite.get_children().slice(0, int(HP * 2)):
+					child.visible = true
+				pass
 		if value == 0:
-			queue_free()
+			ACTIVE = false
+			current_hp_sprite.visible = false
+			$AnimationPlayer.stop()
+			$AnimationPlayer.play("death")
 		elif value < 0:
-			queue_free()
+			ACTIVE = false
+			current_hp_sprite.visible = false
+			$AnimationPlayer.stop()
+			$AnimationPlayer.play("death")
 @export var DASH_LENGTH := 200
 @export var DASH_DURATION_SECONDS := 0.5
 @export var DASH_COOLDOWN_SECONDS := 0.3
 @export var KEEP_DISTANCE_FROM_PLAYER := 110
 @export var ATTACK_1_DAMAGE := 1
 @export var ATTACK_2_DAMAGE := 1
+
 
 signal dash_finished
 signal dash_cooldown_finished
@@ -40,6 +59,11 @@ var dashing_target := Vector2.ZERO
 var current_target := Vector2.ZERO
 var dash_time_elapsed: float = 0.0
 var previous_position: Vector2
+var dash_tween: Tween
+
+var current_hp_sprite: Node2D = null
+
+var query_offscreen := false
 
 enum ACTION_STATES {
 	Idle,
@@ -52,10 +76,16 @@ enum ACTION_STATES {
 
 func _ready() -> void:
 	HP = HP
+	current_hp_sprite = $hp_sprites.get_node("health" + str(HP))
+	current_hp_sprite.visible = true
 
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint():
 		return
+	
+	if HP < 0.5 and query_offscreen:
+		if not $AnimationPlayer.is_playing():
+			queue_free()
 	
 	if debug_dashing:
 		update_dash(delta)
@@ -70,6 +100,7 @@ func _process(delta: float) -> void:
 		ACTION_STATES.Chase:
 			velocity = global_position.direction_to(Global.Player.global_position)
 			move_and_collide(velocity * BASE_SPEED * delta)
+			velocity = Vector2.ZERO
 			
 			if global_position.distance_to(Global.Player.global_position) < KEEP_DISTANCE_FROM_PLAYER:
 				action_state = ACTION_STATES.Dash_Attack_Windup
@@ -112,10 +143,10 @@ func start_dash() -> void:
 	dash_time_elapsed = 0.0
 	previous_position = global_position
 	
-	var tween := create_tween()
-	tween.tween_property(self, "current_target", dashing_target, DASH_DURATION_SECONDS).\
+	dash_tween = create_tween()
+	dash_tween.tween_property(self, "current_target", dashing_target, DASH_DURATION_SECONDS).\
 		set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)
-	await tween.finished
+	await dash_tween.finished
 	
 	dashing_target = Vector2.ZERO
 	emit_signal("dash_finished")
@@ -138,7 +169,29 @@ func push(push_vector: Vector2) -> void:
 func send_damage(_body: Node2D) -> void:
 	var effect := Effect.new()
 	effect.damage = ATTACK_1_DAMAGE
-	Global.effect_player(effect)
+	Global.Player.apply_effect(effect)
 
 func apply_effect(effect: Effect) -> void:
 	HP -= effect.damage
+	push(effect.knockback)
+	
+
+func get_feet() -> Vector2:
+	return $feet.global_position
+
+func set_hitstun() -> void:
+	$AnimationPlayer.stop()
+	$AnimationPlayer.queue("RESET")
+	action_state = ACTION_STATES.Idle
+	if dash_tween:
+		dash_tween.kill()
+	pass
+
+func finish_hitstun() -> void:
+	action_state = ACTION_STATES.Chase
+	print("hitstun end")
+
+func _on_death_disappear_screen_exited() -> void:
+	if HP > 0:
+		return
+	query_offscreen = true

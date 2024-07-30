@@ -3,12 +3,6 @@ extends Spell
 @export var DAMAGE := 2
 @export var SPEED := 2000
 
-#func _ready() -> void:
-	#%AnimationPlayer.play("windup")
-	#set_process(false)
-	#await %AnimationPlayer.animation_finished
-	#set_process(true)
-	#pass
 
 func _process(delta: float) -> void:
 	velocity = transform.x * SPEED
