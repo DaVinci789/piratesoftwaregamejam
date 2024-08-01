@@ -5,6 +5,9 @@ var cursor_state: int = Spell_Cost.CursorState.None
 func _ready() -> void:
 	Global.switch0_entered.connect(_on_switch0_entered)
 	$magic.modulate.a = 0
+	randomize_fire()
+	randomize_spell()
+	randomize_rest()
 
 func _on_switch0_entered() -> void:
 	create_tween().tween_property($magic, "modulate", Color.WHITE, 0.2).set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_IN)
@@ -90,4 +93,58 @@ func reset_cast_indicator() -> void:
 		var children: Array = node.get_children()
 		for child: Label in children:
 			child.material.set_shader_parameter("enable", false)
+	pass
+
+func randomize_fire() -> void:
+	var cost := Global.get_random_cost(Global.fire_cost_progression[Global.fire_gain_current])
+	for i in range(4):
+		%cost_fire.get_child(i).modulate = Color.TRANSPARENT
+	for i in cost.length():
+		%cost_fire.get_child(i).texture.region = Rect2(23 * ((int(cost[i]) - 1)), 0, 23, 22)
+		%cost_fire.get_child(i).modulate = Color.WHITE
+		%cost_fire.get_child(i).get_child(i).visible = true
+	
+func randomize_spell() -> void:
+	var spell_cost := Global.get_random_spell_cost()
+	var cost := spell_cost.cost
+	
+	%reward_spell.text = spell_cost.readable_name
+	
+	for i in range(4):
+		%cost_spell.get_child(i).modulate = Color.TRANSPARENT
+	for i in cost.length():
+		%cost_spell.get_child(i).texture.region = Rect2(23 * ((int(cost[i]) - 1)), 0, 23, 22)
+		%cost_spell.get_child(i).modulate = Color.WHITE
+		%cost_spell.get_child(i).get_child(int(spell_cost.cost[i]) - 1).visible = true
+	
+	var time_gain: String = Global.time_gain_progression[Global.fire_gain_current]
+	var hearts_gain: int = Global.hearts_gain_progression[Global.fire_gain_current]
+	
+	%fire_time_gain.text = time_gain
+	
+	match hearts_gain:
+		0:
+			%the_and_label.modulate = Color.TRANSPARENT
+			%heart0.visible = false
+			%heart1.visible = false
+			%heart2.visible = false
+		1:
+			%the_and_label.modulate = Color.WHITE
+			%heart0.visible = true
+			%heart1.visible = false
+			%heart2.visible = false
+		2:
+			%the_and_label.modulate = Color.WHITE
+			%heart0.visible = true
+			%heart1.visible = true
+			%heart2.visible = false
+		3:
+			%the_and_label.modulate = Color.WHITE
+			%heart0.visible = true
+			%heart1.visible = true
+			%heart2.visible = true
+	
+func randomize_rest() -> void:
+	var time_spend: String = Global.time_spend_progression[Global.time_spend_current]
+	%cost_rest.text = time_spend
 	pass

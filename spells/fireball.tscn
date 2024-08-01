@@ -1,9 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://cbj2wmtri6qc5"]
+[gd_scene load_steps=12 format=3 uid="uid://cbj2wmtri6qc5"]
 
 [ext_resource type="Script" path="res://spells/fireball.gd" id="1_a3857"]
 [ext_resource type="Resource" uid="uid://b0auhq0uvo6lg" path="res://spells/fireball.tres" id="2_bniw8"]
 [ext_resource type="Shader" path="res://flash.gdshader" id="2_kq7qg"]
 [ext_resource type="Texture2D" uid="uid://c5undktlvwpo4" path="res://assets/fireball.png" id="4_ctckl"]
+[ext_resource type="AudioStream" uid="uid://bjpmi8oldx2xn" path="res://assets/fire1.wav" id="5_frl2v"]
+[ext_resource type="Texture2D" uid="uid://b68pee8i4xib7" path="res://assets/neutral_light.webp" id="6_w434v"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_4jir3"]
 shader = ExtResource("2_kq7qg")
@@ -84,6 +86,14 @@ position = Vector2(-0.5, 0.5)
 shape = SubResource("RectangleShape2D_8iha8")
 
 [node name="sfx" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_frl2v")
+volume_db = -30.079
+autoplay = true
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+position = Vector2(17, 0)
+texture = ExtResource("6_w434v")
+texture_scale = 0.13
 
 [connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]
 [connection signal="area_entered" from="hitbox" to="." method="_on_hitbox_area_entered"]

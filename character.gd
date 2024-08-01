@@ -1,8 +1,16 @@
 extends CharacterBody2D
 
 @export var SPEED := 700
-@export var BASE_HP := 5
-var hp := BASE_HP
+@export var BASE_HP := 5.0
+var hp := BASE_HP:
+	set(value):
+		hp = value
+		if hp <= 0.0:
+			global_position = Global.camp_entrance.global_position
+			Global.Camera.global_position = Global.camp_camera_snap.global_position
+			Global.Camera.polygon_restraint = Global.CurrentLevel.camera_polygon_restraints["camp_restraint"]
+			hp = BASE_HP
+			pass
 @export var CAMERA_INPUT_UPDATE := 0.1
 @export var DASH_DURATION_SECONDS := 0.2
 @export var DASH_LENGTH := 350
@@ -28,6 +36,7 @@ signal interact
 
 enum STATES {
 	Normal,
+	Crafting,
 	Dash,
 	Dash_Enter,
 	Dash_Exit,
@@ -47,8 +56,10 @@ func _ready() -> void:
 	hp = BASE_HP
 	slash_damage.damage = SLASH_DAMAGE
 	$element_input_timeout.wait_time = ELEMENT_INPUT_TIMEOUT
-	for spell: String in spells:
-		print(Global.spells_name[spell][0])
+	
+	var listing := ["fireball", "earthshock", "lightning", "dancing_wisps", "shield", "waterwave"]
+	listing.shuffle()
+	for spell: String in listing.slice(0, 3):
 		var spell_cost: Resource = Global.spells_name[spell][0]
 		Global.UI.load_spell(spell_cost)
 
@@ -57,96 +68,104 @@ func get_input() -> void:
 	velocity = input_dir * SPEED
 
 func _physics_process(delta: float) -> void:
-	if Input.is_action_just_pressed("element_1"):
-		spell_input += "1"
-	if Input.is_action_just_pressed("element_2"):
-		spell_input += "2"
-	if Input.is_action_just_pressed("element_3"):
-		spell_input += "3"
-	if Input.is_action_just_pressed("element_4"):
-		spell_input += "4"
 	
-	if spell_input.length() != 0 and $element_input_timeout.is_stopped():
-		$element_input_timeout.start()
-	
-	if Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized() != Vector2.ZERO:
-		$object_interact.target_position = Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized() * INTERACT_DISTANCE
-		if %AnimationTree.get("parameters/playback").get_current_node() != "slash":
-			%AnimationTree.get("parameters/playback").travel("move")
-			$slash_hitbox_down.monitoring = false
-			$slash_hitbox_left.monitoring = false
-			$slash_hitbox_right.monitoring = false
-			$slash_hitbox_up.monitoring = false
-		%AnimationTree.set("parameters/move/BlendSpace2D/blend_position", Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized())
-		%AnimationTree.set("parameters/idle/BlendSpace2D/blend_position", Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized())
-		%AnimationTree.set("parameters/slash/BlendSpace2D/blend_position", Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized())
-	else:
-		%AnimationTree.get("parameters/playback").travel("idle")
+	if state != STATES.Crafting:
+			if Input.is_action_just_pressed("element_1"):
+				spell_input += "1"
+			if Input.is_action_just_pressed("element_2"):
+				spell_input += "2"
+			if Input.is_action_just_pressed("element_3"):
+				spell_input += "3"
+			if Input.is_action_just_pressed("element_4"):
+				spell_input += "4"
+					
+			if currently_casting_spell_name == "" and spell_input != "":
+				Global.UI.light_element_input(spell_input)
 			
-	if currently_casting_spell_name == "" and spell_input != "":
-		Global.UI.light_element_input(spell_input)
-	
-	# on Successful Spell input read
-	for spell: String in spells:
-		var spell_res: Spell_Cost = Global.spells_name[spell][0]
-		if spell_res.cost == spell_input:
-			if Spell_Cost.to_conditional(spell_res.cost):
-				Global.UI.cursor_state = spell_res.cursor_state
-				currently_casting_spell_name = spell_res.readable_name
-				spell_input = ""
-			pass
-			
-	var special_activate := special_activated()
-	if special_activate[0] == true:
-		var to_launch: Node2D = null
-		
-		if currently_casting_spell_name != "":
-			spell_input = ""
-			Global.UI.reset_cast_indicator()
-			to_launch = Global.spells_name[currently_casting_spell_name.to_lower().replace(" ", "_")][1].instantiate()
-			to_launch.global_position = global_position
-			
-		if currently_casting_spell_name == "Fireball":
-			if special_activate[1] != Vector2.ZERO:
-				to_launch.rotate(special_activate[1].angle())
-			else:
-				to_launch.look_at(get_global_mouse_position())
+			# on Successful Spell input read
+			for spell: String in ["fireball", "earthshock", "lightning", "dancing_wisps", "shield", "waterwave"]:
+				var spell_res: Spell_Cost = Global.spells_name[spell][0]
+				if spell_res.cost == spell_input:
+					if Spell_Cost.to_conditional(spell_res.cost):
+						Global.UI.cursor_state = spell_res.cursor_state
+						currently_casting_spell_name = spell_res.readable_name
+						spell_input = ""
+					else:
+						if not $error.playing:
+							$error.play()
+					pass
+					
+			var special_activate := special_activated()
+			if special_activate[0] == true:
+				var to_launch: Node2D = null
 				
-			Global.Projectiles.add_child(to_launch)
-		elif currently_casting_spell_name == "Earthshock":
-			Global.Projectiles.add_child(to_launch)
-		elif currently_casting_spell_name == "Dancing Wisps":
-			if special_activate[1] != Vector2.ZERO:
-				to_launch.rotate(special_activate[1].angle())
-			else:
-				to_launch.look_at(get_global_mouse_position())
+				if currently_casting_spell_name != "":
+					spell_input = ""
+					### FIXME REMOVE!!!!!
+					Global.UI.reset_cast_indicator()
+					to_launch = Global.spells_name[currently_casting_spell_name.to_lower().replace(" ", "_")][1].instantiate()
+					to_launch.global_position = global_position
+					
+				if currently_casting_spell_name == "Fireball":
+					if special_activate[1] != Vector2.ZERO:
+						to_launch.rotate(special_activate[1].angle())
+					else:
+						to_launch.look_at(get_global_mouse_position())
+						
+					Global.Projectiles.add_child(to_launch)
+				elif currently_casting_spell_name == "Earthshock":
+					Global.Projectiles.add_child(to_launch)
+				elif currently_casting_spell_name == "Dancing Wisps":
+					if special_activate[1] != Vector2.ZERO:
+						to_launch.rotate(special_activate[1].angle())
+					else:
+						to_launch.look_at(get_global_mouse_position())
+						
+					Global.Projectiles.add_child(to_launch)
+					to_launch.global_position = global_position
+				elif currently_casting_spell_name == "Lightning":
+					Global.Projectiles.add_child(to_launch)
+				elif currently_casting_spell_name == "Waterwave":
+					if special_activate[1] != Vector2.ZERO:
+						to_launch.rotate(special_activate[1].angle())
+					else:
+						to_launch.look_at(get_global_mouse_position())
+						
+					Global.Projectiles.add_child(to_launch)
+				elif currently_casting_spell_name == "Shield":
+					add_child(to_launch)
+					pass
+					
+				if currently_casting_spell_name != "":
+					currently_casting_spell_name = ""
 				
-			Global.Projectiles.add_child(to_launch)
-			to_launch.global_position = global_position
-		elif currently_casting_spell_name == "Lightning":
-			Global.Projectiles.add_child(to_launch)
-		elif currently_casting_spell_name == "Waterwave":
-			if special_activate[1] != Vector2.ZERO:
-				to_launch.rotate(special_activate[1].angle())
-			else:
-				to_launch.look_at(get_global_mouse_position())
-				
-			Global.Projectiles.add_child(to_launch)
-		elif currently_casting_spell_name == "Shield":
-			add_child(to_launch)
-			pass
-			
-		if currently_casting_spell_name != "":
-			currently_casting_spell_name = ""
-		
 	match state:
 		STATES.Normal:
 			get_input()
+			
+			if spell_input.length() != 0 and $element_input_timeout.is_stopped():
+				$element_input_timeout.start()
+			if Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized() != Vector2.ZERO:
+				$object_interact.target_position = Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized() * INTERACT_DISTANCE
+				if %AnimationTree.get("parameters/playback").get_current_node() != "slash":
+					%AnimationTree.get("parameters/playback").travel("move")
+					$slash_hitbox_down.monitoring = false
+					$slash_hitbox_left.monitoring = false
+					$slash_hitbox_right.monitoring = false
+					$slash_hitbox_up.monitoring = false
+				%AnimationTree.set("parameters/move/BlendSpace2D/blend_position", Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized())
+				%AnimationTree.set("parameters/idle/BlendSpace2D/blend_position", Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized())
+				%AnimationTree.set("parameters/slash/BlendSpace2D/blend_position", Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized())
+			else:
+				%AnimationTree.get("parameters/playback").travel("idle")
+		
 			if Input.is_action_just_pressed("dash"):
 				state = STATES.Dash_Enter
 			
 			if Input.is_action_just_pressed("interact") and $object_interact.is_colliding():
-				emit_signal("interact", $object_interact.get_collider())
+				if $object_interact.get_collider().name == "crafting":
+					emit_signal("interact", $object_interact.get_collider())
+					state = STATES.Crafting
 				
 			if Input.is_action_just_pressed("slash"):
 				%AnimationTree.get("parameters/playback").travel("slash", false)
@@ -154,6 +173,11 @@ func _physics_process(delta: float) -> void:
 			var collision := move_and_collide(velocity * delta)
 			if collision:
 				handle_collision(collision)
+			pass
+		STATES.Crafting:
+			if Input.is_action_just_pressed("interact") and $object_interact.is_colliding():
+				emit_signal("interact", $object_interact.get_collider())
+				state = STATES.Normal
 			pass
 		STATES.Dash_Enter:
 			var direction := Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized()

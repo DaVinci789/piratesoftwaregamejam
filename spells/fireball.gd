@@ -3,6 +3,9 @@ extends Spell
 @export var DAMAGE := 2
 @export var SPEED := 2000
 
+func _ready() -> void:
+	$sfx.play()
+	pass
 
 func _process(delta: float) -> void:
 	velocity = transform.x * SPEED

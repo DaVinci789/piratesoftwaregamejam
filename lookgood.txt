@@ -5,16 +5,18 @@ Look Good Stream
   - Ability Names [DOING]
 - Player spell ui
 - Particles
+- Light and Shadow
+  - kinda
+- enemy HP bars [DONE]
+
 - PILLARS
 - Put in audio hooks
-- Light and Shadow
 - Writing down attribution
 - Dead enemy shadow residue / corpse and wisps
   - dissolve effect [DONE]
-  - corpse
-  - wisps
-- enemy HP bars
-- flooring
+  - corpse [SKIP]
+  - wisps [DOING]
+- flooring [DOING]
 
 - Spells
   - Spell Cost architecture
@@ -42,3 +44,20 @@ allnew.itch.io/flask-icons-32x32px
 bdragon1727.itch.io/free-effect-and-bullet-16x16
 https://somepx.itch.io/free-font-yolk
 https://nimblebeastscollective.itch.io/magosfonts
+
+- Dungeon Level Design
+- Programming the rest of the spells
+
+- Camp scene
+  - Reslan?
+- Tutorial
+- Main Menu
+
+
+
+
+
+
+
+
+

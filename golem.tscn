@@ -1,16 +1,14 @@
-[gd_scene load_steps=15 format=3 uid="uid://cabod6cllbi2u"]
+[gd_scene load_steps=19 format=3 uid="uid://cabod6cllbi2u"]
 
 [ext_resource type="Script" path="res://golem.gd" id="1_duijy"]
 [ext_resource type="Shader" path="res://flash.gdshader" id="2_ahm67"]
-[ext_resource type="Texture2D" uid="uid://dxwcjwjkl6dw8" path="res://icon.svg" id="2_w2lhu"]
 [ext_resource type="Texture2D" uid="uid://xjpleb8vfn68" path="res://assets/death_shadow.png" id="4_uqt7y"]
 [ext_resource type="PackedScene" uid="uid://r5ussjeb5c2i" path="res://hp_sprites.tscn" id="5_sy0aw"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_tcadh"]
-resource_local_to_scene = true
-shader = ExtResource("2_ahm67")
-shader_parameter/enable = false
-shader_parameter/sensitivity = 0.0
+[ext_resource type="Texture2D" uid="uid://hk0ug0qjjc7e" path="res://assets/bubble.png" id="6_0xb8l"]
+[ext_resource type="PackedScene" uid="uid://cmnqkjc5omnin" path="res://wisp.tscn" id="6_2ywp8"]
+[ext_resource type="Texture2D" uid="uid://bvie84wfsa6h6" path="res://assets/bubble_earth.png" id="6_jf4qe"]
+[ext_resource type="Texture2D" uid="uid://bi6qsp6f24301" path="res://assets/bubble_air.png" id="7_2mjal"]
+[ext_resource type="Texture2D" uid="uid://cierj4cjojtv7" path="res://assets/bubble_fire.png" id="9_jposv"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_76cot"]
 radius = 16.0
@@ -21,7 +19,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:material:shader_parameter/enable")
+tracks/0/path = NodePath("sprites/bubble_earth:material:shader_parameter/enable")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -33,7 +31,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Sprite2D:material:shader_parameter/sensitivity")
+tracks/1/path = NodePath("sprites/bubble_earth:material:shader_parameter/sensitivity")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -45,7 +43,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Sprite2D:offset")
+tracks/2/path = NodePath("sprites/bubble_earth:offset")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -134,7 +132,7 @@ step = 0.01
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:material:shader_parameter/sensitivity")
+tracks/0/path = NodePath("sprites/bubble_earth:material:shader_parameter/sensitivity")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -146,7 +144,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Sprite2D:offset")
+tracks/1/path = NodePath("sprites/bubble_earth:offset")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -194,7 +192,7 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("Sprite2D:material:shader_parameter/enable")
+tracks/5/path = NodePath("sprites/bubble_earth:material:shader_parameter/enable")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -258,7 +256,7 @@ length = 0.8
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:material:shader_parameter/enable")
+tracks/0/path = NodePath("sprites/bubble_earth:material:shader_parameter/enable")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -284,16 +282,18 @@ radius = 30.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_lv7lx"]
 radius = 29.0172
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tcadh"]
+resource_local_to_scene = true
+shader = ExtResource("2_ahm67")
+shader_parameter/enable = false
+shader_parameter/sensitivity = 0.0
+
 [node name="golem" type="CharacterBody2D"]
 collision_layer = 4
 collision_mask = 3
 script = ExtResource("1_duijy")
+GOLEM_TYPE = 1
 DASH_LENGTH = 140
-
-[node name="Sprite2D" type="Sprite2D" parent="."]
-material = SubResource("ShaderMaterial_tcadh")
-scale = Vector2(0.266597, 0.396104)
-texture = ExtResource("2_w2lhu")
 
 [node name="shadow" type="Sprite2D" parent="."]
 visible = false
@@ -345,6 +345,58 @@ shape = SubResource("CircleShape2D_lv7lx")
 
 [node name="feet" type="Marker2D" parent="."]
 position = Vector2(0, 22)
+
+[node name="drop_earth" parent="." instance=ExtResource("6_2ywp8")]
+position = Vector2(-10, 0)
+
+[node name="drop_earth2" parent="." instance=ExtResource("6_2ywp8")]
+position = Vector2(10, 0)
+
+[node name="drop_air" parent="." instance=ExtResource("6_2ywp8")]
+position = Vector2(-10, 0)
+TYPE = 1
+
+[node name="drop_air2" parent="." instance=ExtResource("6_2ywp8")]
+position = Vector2(10, 0)
+TYPE = 1
+
+[node name="drop_fire" parent="." instance=ExtResource("6_2ywp8")]
+position = Vector2(-10, 0)
+TYPE = 2
+
+[node name="drop_fire2" parent="." instance=ExtResource("6_2ywp8")]
+position = Vector2(10, 0)
+TYPE = 2
+
+[node name="drop_water" parent="." instance=ExtResource("6_2ywp8")]
+position = Vector2(-10, 0)
+TYPE = 3
+
+[node name="drop_water2" parent="." instance=ExtResource("6_2ywp8")]
+position = Vector2(10, 0)
+TYPE = 3
+
+[node name="sprites" type="Node2D" parent="."]
+
+[node name="bubble_earth" type="Sprite2D" parent="sprites"]
+visible = false
+material = SubResource("ShaderMaterial_tcadh")
+texture = ExtResource("6_jf4qe")
+
+[node name="bubble_air" type="Sprite2D" parent="sprites"]
+visible = false
+material = SubResource("ShaderMaterial_tcadh")
+texture = ExtResource("7_2mjal")
+
+[node name="bubble_water" type="Sprite2D" parent="sprites"]
+visible = false
+material = SubResource("ShaderMaterial_tcadh")
+texture = ExtResource("6_0xb8l")
+
+[node name="bubble_fire" type="Sprite2D" parent="sprites"]
+visible = false
+material = SubResource("ShaderMaterial_tcadh")
+texture = ExtResource("9_jposv")
 
 [connection signal="area_entered" from="hurtbox" to="." method="_on_hurtbox_area_entered"]
 [connection signal="body_entered" from="hitbox" to="." method="send_damage"]

@@ -33,22 +33,32 @@ extends CharacterBody2D
 				for child: Node2D in current_hp_sprite.get_children().slice(0, int(HP * 2)):
 					child.visible = true
 				pass
+				
 		if value == 0:
-			ACTIVE = false
-			current_hp_sprite.visible = false
-			$AnimationPlayer.stop()
-			$AnimationPlayer.play("death")
+			pass
 		elif value < 0:
+			if (find_children("drop_*").size() == 2):
+				find_children("drop_*")[1].queue_free()
+		if value <= 0:
+			for child: Node in get_children():
+				if not child is Wisp:
+					continue
+				child.activate()
+				child.call_deferred("reparent", Global.Projectiles)
 			ACTIVE = false
 			current_hp_sprite.visible = false
 			$AnimationPlayer.stop()
 			$AnimationPlayer.play("death")
+			pass
+@export var GOLEM_TYPE := Wisp.Elements.Earth
 @export var DASH_LENGTH := 200
 @export var DASH_DURATION_SECONDS := 0.5
 @export var DASH_COOLDOWN_SECONDS := 0.3
 @export var KEEP_DISTANCE_FROM_PLAYER := 110
 @export var ATTACK_1_DAMAGE := 1
 @export var ATTACK_2_DAMAGE := 1
+
+@onready var wisp_scene := preload("res://wisp.tscn")
 
 
 signal dash_finished
@@ -78,14 +88,37 @@ func _ready() -> void:
 	HP = HP
 	current_hp_sprite = $hp_sprites.get_node("health" + str(HP))
 	current_hp_sprite.visible = true
+	GOLEM_TYPE = (Wisp.Elements.values().pick_random())
+	
+	match GOLEM_TYPE:
+		Wisp.Elements.Earth:
+			$sprites/bubble_earth.visible = true
+			for child: Node2D in find_children("drop_*"):
+				if not child.name.contains("earth"):
+					child.queue_free()
+		Wisp.Elements.Air:
+			$sprites/bubble_air.visible = true
+			for child: Node2D in find_children("drop_*"):
+				if not child.name.contains("air"):
+					child.queue_free()
+		Wisp.Elements.Fire:
+			$sprites/bubble_fire.visible = true
+			for child: Node2D in find_children("drop_*"):
+				if not child.name.contains("fire"):
+					child.queue_free()
+		Wisp.Elements.Water:
+			$sprites/bubble_water.visible = true
+			for child: Node2D in find_children("drop_*"):
+				if not child.name.contains("water"):
+					child.queue_free()
 
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint():
 		return
 	
-	if HP < 0.5 and query_offscreen:
-		if not $AnimationPlayer.is_playing():
-			queue_free()
+	#if HP < 0.5 and query_offscreen:
+		#if not $AnimationPlayer.is_playing():
+			#$sprites.visible = false
 	
 	if debug_dashing:
 		update_dash(delta)
@@ -192,6 +225,47 @@ func finish_hitstun() -> void:
 	print("hitstun end")
 
 func _on_death_disappear_screen_exited() -> void:
-	if HP > 0:
+	if HP > 0 or ACTIVE:
 		return
 	query_offscreen = true
+
+func revitalize() -> void:
+	$AnimationPlayer.play("RESET")
+	HP = 3
+	current_hp_sprite.visible = true
+	for child: Node2D in current_hp_sprite.get_children():
+		child.visible = false
+	for child: Node2D in current_hp_sprite.get_children().slice(0, int(HP * 2)):
+		child.visible = true
+	var wisp: Node2D = wisp_scene.instantiate()
+	wisp.name = "drop_"
+	match GOLEM_TYPE:
+		Wisp.Elements.Earth:
+			wisp.name += "earth"
+			wisp.TYPE = Wisp.Elements.Earth
+		Wisp.Elements.Air:
+			wisp.name += "air"
+			wisp.TYPE = Wisp.Elements.Air
+		Wisp.Elements.Fire:
+			wisp.name += "fire"
+			wisp.TYPE = Wisp.Elements.Fire
+		Wisp.Elements.Water:
+			wisp.name += "water"
+			wisp.TYPE = Wisp.Elements.Water
+	add_child(wisp)
+	var wisp2: Node2D = wisp_scene.instantiate()
+	wisp2.name = "drop_"
+	match GOLEM_TYPE:
+		Wisp.Elements.Earth:
+			wisp2.name += "earth"
+			wisp2.TYPE = Wisp.Elements.Earth
+		Wisp.Elements.Air:
+			wisp2.name += "air"
+			wisp2.TYPE = Wisp.Elements.Air
+		Wisp.Elements.Fire:
+			wisp2.name += "fire"
+			wisp2.TYPE = Wisp.Elements.Fire
+		Wisp.Elements.Water:
+			wisp2.name += "water"
+			wisp2.TYPE = Wisp.Elements.Water
+	add_child(wisp2)

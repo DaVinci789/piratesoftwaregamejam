@@ -1,7 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://uy6pput38sag"]
+[gd_scene load_steps=13 format=3 uid="uid://uy6pput38sag"]
 
 [ext_resource type="Script" path="res://spells/dancing_wisps.gd" id="1_xx4li"]
 [ext_resource type="Texture2D" uid="uid://bm8smkvxw63u3" path="res://assets/dancing_wisps.png" id="2_r2jy3"]
+[ext_resource type="AudioStream" uid="uid://2r2m1s4dtcsb" path="res://assets/WindSpellSFX.mp3" id="3_5rt3r"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qanwa"]
 
@@ -17,6 +18,21 @@ radius = 21.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_vlu3n"]
 radius = 21.0
 
+[sub_resource type="Animation" id="Animation_plhje"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:DAMAGE")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+
 [sub_resource type="Animation" id="Animation_ypg8g"]
 resource_name = "damage"
 length = 0.25
@@ -31,21 +47,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [1.0, 0.0]
-}
-
-[sub_resource type="Animation" id="Animation_plhje"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:DAMAGE")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [1.0]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_sc35m"]
@@ -116,6 +117,11 @@ shape = SubResource("CircleShape2D_vlu3n")
 libraries = {
 "": SubResource("AnimationLibrary_sc35m")
 }
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_5rt3r")
+volume_db = -29.523
+autoplay = true
 
 [connection signal="area_entered" from="Sprite2D/hitbox" to="." method="_on_hitbox0_area_entered"]
 [connection signal="area_entered" from="Sprite2D2/hitbox" to="." method="_on_hitbox1_area_entered"]

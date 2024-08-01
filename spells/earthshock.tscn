@@ -1,9 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://bvo64t00m7ruu"]
+[gd_scene load_steps=11 format=3 uid="uid://bvo64t00m7ruu"]
 
 [ext_resource type="Script" path="res://spells/earthshock.gd" id="1_e7l25"]
 [ext_resource type="Resource" uid="uid://bfii021kp40lx" path="res://spells/earthshock.tres" id="2_1wi7g"]
 [ext_resource type="Shader" path="res://spells/earthshock.gdshader" id="2_rufkp"]
 [ext_resource type="Texture2D" uid="uid://bhsybsvawekbr" path="res://assets/earthshock.png" id="4_hc4ha"]
+[ext_resource type="AudioStream" uid="uid://bnabvjluwb7wv" path="res://assets/earthbreak.wav" id="5_70v4j"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_n7ufb"]
 shader = ExtResource("2_rufkp")
@@ -103,3 +104,6 @@ position = Vector2(0.5, -0.5)
 shape = SubResource("RectangleShape2D_fqpl5")
 
 [node name="sfx" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_70v4j")
+volume_db = -13.419
+autoplay = true

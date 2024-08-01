@@ -8,15 +8,17 @@ var max_angle := 4.7
 @export var elements_left := 2:
 	set(value):
 		elements_left = value
-		$Label.text = str(value)
-@export var current_value: int = 5:
+		if $Label != null:
+			$Label.text = str(value)
+@export var current_value: int = 6:
 	set(value):
 		current_value = value
-		if value < 1 and $Label.text != "0":
+		if value < 1 and elements_left != 0:
 			elements_left -= 1
-			current_value = 5 + current_value
+			current_value = 6 + current_value
 		var temp := ((min_angle * -1) + max_angle) / 100
-		current_angle = max_angle - (20 * current_value * temp)
+		# 100 / MAX_VALUE
+		current_angle = max_angle - (17 * current_value * temp)
 		queue_redraw()
 
 @export var meter_color := Color('#71e958'):

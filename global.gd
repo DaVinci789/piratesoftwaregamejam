@@ -11,13 +11,23 @@ var AirWheel: Node2D
 var FireWheel: Node2D
 var WaterWheel: Node2D
 
+var camp_entrance: Marker2D
+var camp_camera_snap: Marker2D
+
 var spells_name := {}
 var spells_cost := {}
-var spell_path := "res://spells/"
-var spell_dir: DirAccess = null
 
 var time_left := 0
 var times_increased_time := 0
+
+var time_gain_progression := ["00:30", "00:45", "1:00", "1:15", "1:30", "2:00", "2:15", "2:30", "3:00", "3:15", "3:30", "4:00"]
+var hearts_gain_progression := [0, 0, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 3]
+var fire_cost_progression := [1, 1, 2, 2, 2, 2, 3, 3, 3, 4, 4, 4]
+var time_spend_progression := ["01:00", "01:15", "01:30", "02:00", "03:00", "03:30", "04:00"]
+var fire_gain_current := 0
+var time_spend_current := 0
+
+var audios := {}
 
 signal switch0_entered
 
@@ -28,19 +38,29 @@ func _ready() -> void:
 	min_size.y = ProjectSettings.get_setting('display/window/size/viewport_height')
 	get_window().min_size = min_size
 	
+	var spell_path := "res://spells/"
+	var spell_dir: DirAccess = null
+	
 	spell_dir = DirAccess.open(spell_path)
 	spell_dir.list_dir_begin()
 	var file_name := spell_dir.get_next()
 	while file_name != "":
 		if ".tres" in file_name:
-			var spell_cost := ResourceLoader.load(spell_path + file_name)
+			var path := ""
+			### ON RELEASE:
+			path = spell_dir.get_current_dir() + "/" + file_name.get_file().replace(".import", "").replace(".tscn", "").replace(".remap", "")
+			## OTHERWISE
+			# path = spell_path + file_name
+			## END ON RELEASE
+			var spell_cost := ResourceLoader.load(path)
+			
 			if not spells_cost.has(spell_cost.cost):
 				spells_cost[spell_cost.cost] = []
-			spells_cost[spell_cost.cost].append([spell_cost, load(spell_path + file_name.get_file().get_basename() + ".tscn")])
-			print(file_name)
-			spells_name[spell_cost.readable_name.to_lower().replace(" ", "_")] = ([spell_cost, load(spell_path + file_name.get_file().get_basename() + ".tscn")])
+			spells_cost[spell_cost.cost].append([spell_cost, load(path.replace("tres", "tscn"))])
+			print(spells_cost[spell_cost.cost])
+			spells_name[spell_cost.readable_name.to_lower().replace(" ", "_")] = ([spell_cost, load(path.replace("tres", "tscn"))])
 		file_name = spell_dir.get_next()
-	
+
 	Camera = get_node('/root/world/camera')
 	Player = get_node('/root/world/character')
 	Projectiles = get_node('/root/world/projectiles')
@@ -67,6 +87,8 @@ func change_room(to: String, enable_enemies_in: String, disable_enemies_in: Stri
 		for enemy: Node2D in CurrentLevel.camera_polygon_restraints[enable_enemies_in].get_children():
 			enemy.ACTIVE = true
 			enemy.action_state = Enemy.ACTION_STATES.Chase
+			if enemy.HP <= 0:
+				enemy.revitalize()
 		Global.CurrentLevel.find_child("outlands").get_node("darkness").color = Color("#080808")
 			
 	if disable_enemies_in != "":
@@ -85,8 +107,16 @@ func get_random_spell() -> PackedScene:
 	spells.shuffle()
 	return spells[0][1]
 	pass
+	
+func get_random_spell_cost() -> Spell_Cost:
+	var keys := spells_cost.keys()
+	keys.shuffle()
+	var spells: Array = spells_cost[keys[0]]
+	spells.shuffle()
+	return spells[0][0]
+	pass
 
-func get_random_timer_increase(length: int) -> String:
+func get_random_cost(length: int) -> String:
 	var output := ""
 	var choices := ["1","2","3","4",]
 	for i in range(length):
@@ -94,7 +124,15 @@ func get_random_timer_increase(length: int) -> String:
 		output += choices[0]
 	return output
 
+func string_to_seconds(format: String) -> int:
+	var time_parts := format.split(":")
+	return int(time_parts[0]) * 60 + int(time_parts[1])
+
 func _on_player_interact(collider: Node2D) -> void:
 	if collider.name == "crafting":
-		UI.get_node('ColorRect').visible = not UI.get_node('ColorRect').visible
+		#UI.get_node('crafting').visible = not UI.get_node('crafting').visible
+		if UI.get_node("crafting").visible == false:
+			UI.get_node("AnimationPlayer").play("crafting")
+		else:
+			UI.get_node("AnimationPlayer").play_backwards("crafting")
 	return

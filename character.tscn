@@ -1,9 +1,10 @@
-[gd_scene load_steps=65 format=3 uid="uid://cdudyaojxmf5b"]
+[gd_scene load_steps=66 format=3 uid="uid://cdudyaojxmf5b"]
 
 [ext_resource type="Script" path="res://character.gd" id="1_4yr1q"]
 [ext_resource type="Material" uid="uid://6rno7n4h3tmh" path="res://pixelscaling.tres" id="2_pha7q"]
 [ext_resource type="Texture2D" uid="uid://b68pee8i4xib7" path="res://assets/neutral_light.webp" id="4_e4b6u"]
 [ext_resource type="Texture2D" uid="uid://1e7tyjde6y50" path="res://assets/spritesheet_character.png" id="4_kdo6s"]
+[ext_resource type="AudioStream" uid="uid://bvocaisa0advs" path="res://assets/error.wav" id="5_1l8ct"]
 
 [sub_resource type="Animation" id="Animation_m7d4g"]
 length = 0.001
@@ -706,10 +707,16 @@ shape = SubResource("RectangleShape2D_1ku4o")
 [node name="elemental_input" type="AudioStreamPlayer" parent="."]
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
+visible = false
 position = Vector2(-0.999996, -0.999996)
 scale = Vector2(1.40625, 1.40625)
 shadow_enabled = true
 texture = ExtResource("4_e4b6u")
+
+[node name="error" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_1l8ct")
+volume_db = -13.735
+pitch_scale = 0.72
 
 [connection signal="timeout" from="element_input_timeout" to="." method="_on_element_input_timeout_timeout"]
 [connection signal="area_entered" from="slash_hitbox_up" to="." method="_on_slash_hitbox_up_area_entered"]

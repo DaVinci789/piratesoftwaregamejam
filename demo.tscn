@@ -42,14 +42,12 @@ scale = Vector2(8.75145, 9.13196)
 color = Color(0.388235, 0.388235, 0.388235, 1)
 
 [node name="switch0" type="Polygon2D" parent="."]
-visible = false
 position = Vector2(1160, 632)
 polygon = PackedVector2Array(0, 0)
 
 [node name="invisible_in_game" parent="switch0" instance=ExtResource("1_7ru12")]
 
 [node name="switch1" type="Polygon2D" parent="."]
-visible = false
 position = Vector2(2912, 405)
 color = Color(1, 0.164706, 0.611765, 1)
 polygon = PackedVector2Array(0, 0, 0, 945)
@@ -57,7 +55,6 @@ polygon = PackedVector2Array(0, 0, 0, 945)
 [node name="invisible_in_game" parent="switch1" instance=ExtResource("1_7ru12")]
 
 [node name="switch2" type="Polygon2D" parent="."]
-visible = false
 position = Vector2(2948, 2345)
 color = Color(1, 0.164706, 0.611765, 1)
 polygon = PackedVector2Array(0, 0, 578, 0, 578, 605, 0, 605)
@@ -65,14 +62,12 @@ polygon = PackedVector2Array(0, 0, 578, 0, 578, 605, 0, 605)
 [node name="invisible_in_game" parent="switch2" instance=ExtResource("1_7ru12")]
 
 [node name="areaswitch" parent="." instance=ExtResource("2_ompg5")]
-visible = false
 offset_left = 1967.0
 offset_top = 728.0
 offset_right = 2065.0
 offset_bottom = 974.0
 
 [node name="areaswitch2" parent="." instance=ExtResource("2_ompg5")]
-visible = false
 offset_left = 2726.0
 offset_top = 1682.0
 offset_right = 3097.0
@@ -154,15 +149,15 @@ text = "Go here ->"
 
 [node name="golem" parent="." instance=ExtResource("4_6gd1g")]
 position = Vector2(4111, 2720)
-HP = 3
+action_state = 1
+GOLEM_TYPE = null
 DASH_LENGTH = 500
 DASH_COOLDOWN_SECONDS = 1.0
-action_state = 1
 
 [node name="golem2" parent="." instance=ExtResource("4_6gd1g")]
 position = Vector2(2954, 3193)
-HP = 3
 action_state = 1
+GOLEM_TYPE = null
 
 [connection signal="body_entered" from="spawner/Area2D" to="spawner" method="_on_area_2d_body_entered"]
 [connection signal="body_entered" from="spawner2/Area2D" to="spawner2" method="_on_area_2d_body_entered"]
