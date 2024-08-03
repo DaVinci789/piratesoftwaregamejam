@@ -21,11 +21,21 @@ var time_left := 0
 var times_increased_time := 0
 
 var time_gain_progression := ["00:30", "00:45", "1:00", "1:15", "1:30", "2:00", "2:15", "2:30", "3:00", "3:15", "3:30", "4:00"]
-var hearts_gain_progression := [0, 0, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 3]
+var hearts_gain_progression := [0, 0, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3]
 var fire_cost_progression := [1, 1, 2, 2, 2, 2, 3, 3, 3, 4, 4, 4]
 var time_spend_progression := ["01:00", "01:15", "01:30", "02:00", "03:00", "03:30", "04:00"]
-var fire_gain_current := 0
-var time_spend_current := 0
+var fire_gain_current := 0:
+	set(value):
+		if value > time_gain_progression.size() - 1:
+			value = time_gain_progression.size() - 1
+		
+		fire_gain_current = value
+var time_spend_current := 0:
+	set(value):
+		if value > time_spend_progression.size() - 1:
+			value = time_spend_progression.size() - 1
+		
+		time_spend_current = value
 
 var audios := {}
 
@@ -116,21 +126,36 @@ func get_random_spell_cost() -> Spell_Cost:
 	return spells[0][0]
 	pass
 
-func get_random_cost(length: int) -> String:
-	var output := ""
-	var choices := ["1","2","3","4",]
-	for i in range(length):
-		choices.shuffle()
-		output += choices[0]
-	return output
+func get_random_cost(length: int, exclude: String) -> String:
+	var result := ""
+	var numbers: Array[String] = ["1", "2", "3", "4"]
+	
+	while true:
+		result = ""
+		for i in range(length):
+			var random_number := numbers[randi() % numbers.size()]
+			result += random_number
+			
+		if not exclude.begins_with(result):
+			break
+	
+	return result
 
 func string_to_seconds(format: String) -> int:
 	var time_parts := format.split(":")
 	return int(time_parts[0]) * 60 + int(time_parts[1])
+	
+func seconds_to_string(time: int) -> String:
+	var seconds: int = time%60
+	var minutes: int = (time/60)%60
+	var hours: int = (time/60)/60
+	
+	#returns a string with the format "HH:MM:SS"
+	return "%02d:%02d:%02d" % [hours, minutes, seconds]
+
 
 func _on_player_interact(collider: Node2D) -> void:
 	if collider.name == "crafting":
-		#UI.get_node('crafting').visible = not UI.get_node('crafting').visible
 		if UI.get_node("crafting").visible == false:
 			UI.get_node("AnimationPlayer").play("crafting")
 		else:

@@ -6,11 +6,16 @@ var hp := BASE_HP:
 	set(value):
 		hp = value
 		if hp <= 0.0:
-			global_position = Global.camp_entrance.global_position
-			Global.Camera.global_position = Global.camp_camera_snap.global_position
-			Global.Camera.polygon_restraint = Global.CurrentLevel.camera_polygon_restraints["camp_restraint"]
 			hp = BASE_HP
-			pass
+			
+			Global.CurrentLevel._on_dungeon_exit_body_entered(null)
+			Global.UI.delete_spells()
+			
+			var listing := Global.spells_name.keys()
+			listing.shuffle()
+			for spell: String in listing.slice(0, 1):
+				var spell_cost: Resource = Global.spells_name[spell][0]
+				Global.UI.load_spell(spell_cost)
 @export var CAMERA_INPUT_UPDATE := 0.1
 @export var DASH_DURATION_SECONDS := 0.2
 @export var DASH_LENGTH := 350
@@ -57,9 +62,9 @@ func _ready() -> void:
 	slash_damage.damage = SLASH_DAMAGE
 	$element_input_timeout.wait_time = ELEMENT_INPUT_TIMEOUT
 	
-	var listing := ["fireball", "earthshock", "lightning", "dancing_wisps", "shield", "waterwave"]
-	listing.shuffle()
-	for spell: String in listing.slice(0, 3):
+	#var listing := ["fireball", "earthshock", "lightning", "dancing_wisps", "shield", "waterwave"]
+	#listing.shuffle()
+	for spell: String in spells:
 		var spell_cost: Resource = Global.spells_name[spell][0]
 		Global.UI.load_spell(spell_cost)
 
@@ -68,83 +73,83 @@ func get_input() -> void:
 	velocity = input_dir * SPEED
 
 func _physics_process(delta: float) -> void:
+	if Input.is_action_just_pressed("element_1"):
+		spell_input += "1"
+	if Input.is_action_just_pressed("element_2"):
+		spell_input += "2"
+	if Input.is_action_just_pressed("element_3"):
+		spell_input += "3"
+	if Input.is_action_just_pressed("element_4"):
+		spell_input += "4"
 	
 	if state != STATES.Crafting:
-			if Input.is_action_just_pressed("element_1"):
-				spell_input += "1"
-			if Input.is_action_just_pressed("element_2"):
-				spell_input += "2"
-			if Input.is_action_just_pressed("element_3"):
-				spell_input += "3"
-			if Input.is_action_just_pressed("element_4"):
-				spell_input += "4"
-					
-			if currently_casting_spell_name == "" and spell_input != "":
-				Global.UI.light_element_input(spell_input)
-			
-			# on Successful Spell input read
-			for spell: String in ["fireball", "earthshock", "lightning", "dancing_wisps", "shield", "waterwave"]:
-				var spell_res: Spell_Cost = Global.spells_name[spell][0]
-				if spell_res.cost == spell_input:
-					if Spell_Cost.to_conditional(spell_res.cost):
-						Global.UI.cursor_state = spell_res.cursor_state
-						currently_casting_spell_name = spell_res.readable_name
-						spell_input = ""
-					else:
-						if not $error.playing:
-							$error.play()
-					pass
-					
-			var special_activate := special_activated()
-			if special_activate[0] == true:
-				var to_launch: Node2D = null
-				
-				if currently_casting_spell_name != "":
+		if currently_casting_spell_name == "" and spell_input != "":
+			Global.UI.light_element_input(spell_input)
+		
+		# on Successful Spell input read
+		for spell: String in ["fireball", "earthshock", "lightning", "dancing_wisps", "shield", "waterwave"]:
+			var spell_res: Spell_Cost = Global.spells_name[spell][0]
+			if spell_res.cost == spell_input:
+				if Spell_Cost.to_conditional(spell_res.cost):
+					Global.UI.cursor_state = spell_res.cursor_state
+					currently_casting_spell_name = spell_res.readable_name
 					spell_input = ""
-					### FIXME REMOVE!!!!!
-					Global.UI.reset_cast_indicator()
-					to_launch = Global.spells_name[currently_casting_spell_name.to_lower().replace(" ", "_")][1].instantiate()
-					to_launch.global_position = global_position
-					
-				if currently_casting_spell_name == "Fireball":
-					if special_activate[1] != Vector2.ZERO:
-						to_launch.rotate(special_activate[1].angle())
-					else:
-						to_launch.look_at(get_global_mouse_position())
-						
-					Global.Projectiles.add_child(to_launch)
-				elif currently_casting_spell_name == "Earthshock":
-					Global.Projectiles.add_child(to_launch)
-				elif currently_casting_spell_name == "Dancing Wisps":
-					if special_activate[1] != Vector2.ZERO:
-						to_launch.rotate(special_activate[1].angle())
-					else:
-						to_launch.look_at(get_global_mouse_position())
-						
-					Global.Projectiles.add_child(to_launch)
-					to_launch.global_position = global_position
-				elif currently_casting_spell_name == "Lightning":
-					Global.Projectiles.add_child(to_launch)
-				elif currently_casting_spell_name == "Waterwave":
-					if special_activate[1] != Vector2.ZERO:
-						to_launch.rotate(special_activate[1].angle())
-					else:
-						to_launch.look_at(get_global_mouse_position())
-						
-					Global.Projectiles.add_child(to_launch)
-				elif currently_casting_spell_name == "Shield":
-					add_child(to_launch)
-					pass
-					
-				if currently_casting_spell_name != "":
-					currently_casting_spell_name = ""
+				else:
+					if not $error.playing:
+						$error.play()
+				pass
 				
+		var special_activate := special_activated()
+		if special_activate[0] == true:
+			var to_launch: Node2D = null
+			
+			if currently_casting_spell_name != "":
+				spell_input = ""
+				### FIXME REMOVE!!!!!
+				Global.UI.reset_cast_indicator()
+				to_launch = Global.spells_name[currently_casting_spell_name.to_lower().replace(" ", "_")][1].instantiate()
+				to_launch.global_position = global_position
+				
+			if currently_casting_spell_name == "Fireball":
+				if special_activate[1] != Vector2.ZERO:
+					to_launch.rotate(special_activate[1].angle())
+				else:
+					to_launch.look_at(get_global_mouse_position())
+					
+				Global.Projectiles.add_child(to_launch)
+			elif currently_casting_spell_name == "Earthshock":
+				Global.Projectiles.add_child(to_launch)
+			elif currently_casting_spell_name == "Dancing Wisps":
+				if special_activate[1] != Vector2.ZERO:
+					to_launch.rotate(special_activate[1].angle())
+				else:
+					to_launch.look_at(get_global_mouse_position())
+					
+				Global.Projectiles.add_child(to_launch)
+				to_launch.global_position = global_position
+			elif currently_casting_spell_name == "Lightning":
+				Global.Projectiles.add_child(to_launch)
+			elif currently_casting_spell_name == "Waterwave":
+				if special_activate[1] != Vector2.ZERO:
+					to_launch.rotate(special_activate[1].angle())
+				else:
+					to_launch.look_at(get_global_mouse_position())
+					
+				Global.Projectiles.add_child(to_launch)
+			elif currently_casting_spell_name == "Shield":
+				add_child(to_launch)
+				pass
+				
+			if currently_casting_spell_name != "":
+				currently_casting_spell_name = ""
+				
+	if spell_input.length() != 0 and $element_input_timeout.is_stopped():
+		$element_input_timeout.start()
+			
 	match state:
 		STATES.Normal:
 			get_input()
 			
-			if spell_input.length() != 0 and $element_input_timeout.is_stopped():
-				$element_input_timeout.start()
 			if Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized() != Vector2.ZERO:
 				$object_interact.target_position = Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized() * INTERACT_DISTANCE
 				if %AnimationTree.get("parameters/playback").get_current_node() != "slash":
@@ -173,8 +178,20 @@ func _physics_process(delta: float) -> void:
 			var collision := move_and_collide(velocity * delta)
 			if collision:
 				handle_collision(collision)
-			pass
 		STATES.Crafting:
+			Global.UI.light_cost_spell_input(spell_input)
+			Global.UI.light_cost_fire_input(spell_input)
+			if spell_input == Global.UI.spell_cost.cost:
+				if Spell_Cost.to_major_cost(spell_input):
+					Global.UI.load_spell(Global.UI.spell_cost)
+					Global.UI.spell_cost = Global.UI.randomize_spell()
+					spell_input = ""
+			if spell_input == Global.UI.fire_cost:
+				if Spell_Cost.to_major_cost(spell_input):
+					Global.UI.load_fire_benefit()
+					spell_input = ""
+			if Input.is_action_just_pressed("dash"):
+				Global.UI.load_rest_benefit()
 			if Input.is_action_just_pressed("interact") and $object_interact.is_colliding():
 				emit_signal("interact", $object_interact.get_collider())
 				state = STATES.Normal
@@ -221,7 +238,6 @@ func handle_collision(collision: KinematicCollision2D) -> void:
 
 func apply_effect(effect: Effect) -> void:
 	hp -= (effect.damage * damage_multiplier)
-	pass
 
 func _on_dash_timeout() -> void:
 	state = STATES.Dash_Exit
@@ -247,6 +263,7 @@ func _on_element_input_timeout_timeout() -> void:
 	spell_input = ""
 	if currently_casting_spell_name == "":
 		Global.UI.reset_cast_indicator()
+	Global.UI.reset_camp_indicators()
 
 
 func _on_slash_hitbox_up_area_entered(area: Area2D) -> void:

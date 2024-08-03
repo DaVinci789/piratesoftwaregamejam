@@ -1,12 +1,15 @@
 extends CanvasLayer
 
 var cursor_state: int = Spell_Cost.CursorState.None
+var fire_cost: String
+var spell_cost: Spell_Cost
+var loaded_spells: Array[Spell_Cost] = []
 
 func _ready() -> void:
 	Global.switch0_entered.connect(_on_switch0_entered)
 	$magic.modulate.a = 0
-	randomize_fire()
-	randomize_spell()
+	spell_cost = randomize_spell()
+	fire_cost = randomize_fire(spell_cost.cost)
 	randomize_rest()
 
 func _on_switch0_entered() -> void:
@@ -27,8 +30,12 @@ func _process(_delta: float) -> void:
 			$fist.visible = true
 			pass
 	$debug_current_room.text = "HP: " + str(Global.Player.hp)
+	%spell_timeout.text = Global.seconds_to_string($new_spell.time_left)
 	
 func load_spell(spell: Spell_Cost) -> bool:
+	if spell in loaded_spells:
+		return false
+	loaded_spells.append(spell)
 	var the_slot: Node2D = null
 	for node: Node2D in [$magic/Spellslots1, $magic/Spellslots2, $magic/Spellslots3]:
 		if node.get_node("nametag/Label").text == "":
@@ -36,6 +43,7 @@ func load_spell(spell: Spell_Cost) -> bool:
 			break
 	if the_slot:
 		the_slot.get_node("nametag").visible = true
+		the_slot.get_node("nametag/Label").visible = true
 		the_slot.get_node("nametag/Label").text = spell.readable_name
 		for i in range(spell.cost.length()):
 			var ch := spell.cost[i]
@@ -46,7 +54,6 @@ func load_spell(spell: Spell_Cost) -> bool:
 			the_slot.get_node("slot" + str(i + 1) + "/keys/4").visible = false
 			the_slot.get_node("slot" + str(i + 1) + "/keys/" + ch).visible = true
 	return the_slot != null
-	pass
 
 func light_element_input(input: String) -> void:
 	# List of nodes to check
@@ -72,7 +79,45 @@ func light_element_input(input: String) -> void:
 				cumulative_match = false  # Set to false if the match breaks
 	return
 
-func reset_cast_indicator() -> void:
+func light_cost_fire_input(input: String) -> void:
+	var cumulative_match := true
+	for i in range(input.length()):
+		var symbol_node := %cost_fire.get_child(i)
+		var symbol: Sprite2D = symbol_node.get_child(int(input[i]) - 1)
+		
+		if cumulative_match and symbol.visible:
+			symbol.modulate = Color.WHITE
+		else:
+			symbol_node.get_child(0).modulate = Color.BLACK
+			symbol_node.get_child(1).modulate = Color.BLACK
+			symbol_node.get_child(2).modulate = Color.BLACK
+			symbol_node.get_child(3).modulate = Color.BLACK
+			cumulative_match = false
+
+func light_cost_spell_input(input: String) -> void:
+	var cumulative_match := true
+	for i in range(input.length()):
+		var symbol_node := %cost_spell.get_child(i)
+		var symbol: Sprite2D = symbol_node.get_child(int(input[i]) - 1)
+		
+		if cumulative_match and symbol.visible:
+			symbol.modulate = Color.WHITE
+		else:
+			symbol_node.get_child(0).modulate = Color.BLACK
+			symbol_node.get_child(1).modulate = Color.BLACK
+			symbol_node.get_child(2).modulate = Color.BLACK
+			symbol_node.get_child(3).modulate = Color.BLACK
+			cumulative_match = false
+
+func reset_camp_indicators() -> void:
+	for rect: TextureRect in %cost_fire.get_children():
+		for sprite: Sprite2D in rect.get_children():
+			sprite.modulate = Color.BLACK
+	for rect: TextureRect in %cost_spell.get_children():
+		for sprite: Sprite2D in rect.get_children():
+			sprite.modulate = Color.BLACK
+
+func reset_cast_indicator() -> void: # turns `keys` children black
 	cursor_state = Spell_Cost.CursorState.None
 	var nodes := [
 		get_node("magic/Spellslots1/slot1/keys"),
@@ -93,34 +138,22 @@ func reset_cast_indicator() -> void:
 		var children: Array = node.get_children()
 		for child: Label in children:
 			child.material.set_shader_parameter("enable", false)
-	pass
 
-func randomize_fire() -> void:
-	var cost := Global.get_random_cost(Global.fire_cost_progression[Global.fire_gain_current])
+func randomize_fire(exclude: String) -> String:
+	var cost := Global.get_random_cost(Global.fire_cost_progression[Global.fire_gain_current], exclude)
 	for i in range(4):
 		%cost_fire.get_child(i).modulate = Color.TRANSPARENT
-	for i in cost.length():
+		for child: Sprite2D in %cost_fire.get_child(i).get_children():
+			child.visible = false
+	for i in range(cost.length()):
 		%cost_fire.get_child(i).texture.region = Rect2(23 * ((int(cost[i]) - 1)), 0, 23, 22)
 		%cost_fire.get_child(i).modulate = Color.WHITE
-		%cost_fire.get_child(i).get_child(i).visible = true
-	
-func randomize_spell() -> void:
-	var spell_cost := Global.get_random_spell_cost()
-	var cost := spell_cost.cost
-	
-	%reward_spell.text = spell_cost.readable_name
-	
-	for i in range(4):
-		%cost_spell.get_child(i).modulate = Color.TRANSPARENT
-	for i in cost.length():
-		%cost_spell.get_child(i).texture.region = Rect2(23 * ((int(cost[i]) - 1)), 0, 23, 22)
-		%cost_spell.get_child(i).modulate = Color.WHITE
-		%cost_spell.get_child(i).get_child(int(spell_cost.cost[i]) - 1).visible = true
-	
+		%cost_fire.get_child(i).get_child(int(cost[i]) - 1).visible = true
+		
 	var time_gain: String = Global.time_gain_progression[Global.fire_gain_current]
 	var hearts_gain: int = Global.hearts_gain_progression[Global.fire_gain_current]
 	
-	%fire_time_gain.text = time_gain
+	%fire_time_gain.text = time_gain 
 	
 	match hearts_gain:
 		0:
@@ -143,8 +176,80 @@ func randomize_spell() -> void:
 			%heart0.visible = true
 			%heart1.visible = true
 			%heart2.visible = true
+	return cost
+	
+func randomize_spell() -> Spell_Cost:
+	var spell_cost := Global.get_random_spell_cost()
+	#var tries := 5
+	#while tries > 0 and (fire_cost.begins_with(spell_cost.cost) or spell_cost in loaded_spells):
+		#spell_cost = Global.get_random_spell_cost()
+		#tries -= 1
+	var cost := spell_cost.cost
+	
+	%reward_spell.text = spell_cost.readable_name
+	
+	for i in range(4):
+		%cost_spell.get_child(i).modulate = Color.TRANSPARENT
+		for child: Sprite2D in %cost_spell.get_child(i).get_children():
+			child.visible = false
+	for i in cost.length():
+		%cost_spell.get_child(i).texture.region = Rect2(23 * ((int(cost[i]) - 1)), 0, 23, 22)
+		%cost_spell.get_child(i).modulate = Color.WHITE
+		%cost_spell.get_child(i).get_child(int(spell_cost.cost[i]) - 1).visible = true
+	return spell_cost
 	
 func randomize_rest() -> void:
 	var time_spend: String = Global.time_spend_progression[Global.time_spend_current]
-	%cost_rest.text = time_spend
+	%cost_rest.text = time_spend + " and reroll this menu"
 	pass
+
+func load_fire_benefit() -> void:
+	Global.CurrentLevel.get_node("time_left").wait_time =\
+		Global.string_to_seconds(Global.time_gain_progression[Global.fire_gain_current])\
+		+ Global.time_left
+	Global.CurrentLevel.get_node("time_left").start()
+	Global.Player.BASE_HP += Global.hearts_gain_progression[Global.fire_gain_current]
+	Global.Player.hp += Global.hearts_gain_progression[Global.fire_gain_current]
+	if Global.Player.hp > Global.Player.BASE_HP:
+		Global.Player.hp = Global.Player.BASE_HP
+	Global.fire_gain_current += 1
+	fire_cost = randomize_fire(spell_cost.cost)
+	pass
+
+func delete_spells() -> void:
+	loaded_spells.clear()
+	var slots: Array = [%Spellslots1, %Spellslots2, %Spellslots3]
+	for slot: Node2D in slots:
+		for child: CanvasItem in slot.get_children():
+			if child.name == "nametag":
+				child.visible = false
+				child.get_node("Label").text = ""
+			else:
+				for inner_child: CanvasItem in child.get_children():
+					if inner_child.name == "keys":
+						for even_inner_child: CanvasItem in inner_child.get_children():
+							even_inner_child.visible = false
+					else:
+						inner_child.visible = false
+
+func load_rest_benefit() -> void:
+	Global.Player.hp = Global.Player.BASE_HP
+	
+	var time_spend: String = Global.time_spend_progression[Global.time_spend_current]
+	%cost_rest.text = time_spend + " and reroll this menu"
+	
+	Global.CurrentLevel.get_node("time_left").wait_time =\
+		Global.time_left\
+		- Global.string_to_seconds(Global.time_spend_progression[Global.time_spend_current])
+	Global.CurrentLevel.get_node("time_left").start()
+	
+	Global.time_spend_current += 1
+	
+	randomize_rest()	
+	spell_cost = randomize_spell()
+	fire_cost = randomize_fire(spell_cost.cost)
+	
+	$new_spell.start()
+
+func _on_new_spell_timeout() -> void:
+	spell_cost = randomize_spell()

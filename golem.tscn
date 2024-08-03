@@ -292,7 +292,7 @@ shader_parameter/sensitivity = 0.0
 collision_layer = 4
 collision_mask = 3
 script = ExtResource("1_duijy")
-GOLEM_TYPE = 1
+GOLEM_TYPE = 3
 DASH_LENGTH = 140
 
 [node name="shadow" type="Sprite2D" parent="."]
@@ -346,28 +346,6 @@ shape = SubResource("CircleShape2D_lv7lx")
 [node name="feet" type="Marker2D" parent="."]
 position = Vector2(0, 22)
 
-[node name="drop_earth" parent="." instance=ExtResource("6_2ywp8")]
-position = Vector2(-10, 0)
-
-[node name="drop_earth2" parent="." instance=ExtResource("6_2ywp8")]
-position = Vector2(10, 0)
-
-[node name="drop_air" parent="." instance=ExtResource("6_2ywp8")]
-position = Vector2(-10, 0)
-TYPE = 1
-
-[node name="drop_air2" parent="." instance=ExtResource("6_2ywp8")]
-position = Vector2(10, 0)
-TYPE = 1
-
-[node name="drop_fire" parent="." instance=ExtResource("6_2ywp8")]
-position = Vector2(-10, 0)
-TYPE = 2
-
-[node name="drop_fire2" parent="." instance=ExtResource("6_2ywp8")]
-position = Vector2(10, 0)
-TYPE = 2
-
 [node name="drop_water" parent="." instance=ExtResource("6_2ywp8")]
 position = Vector2(-10, 0)
 TYPE = 3
@@ -389,7 +367,6 @@ material = SubResource("ShaderMaterial_tcadh")
 texture = ExtResource("7_2mjal")
 
 [node name="bubble_water" type="Sprite2D" parent="sprites"]
-visible = false
 material = SubResource("ShaderMaterial_tcadh")
 texture = ExtResource("6_0xb8l")
 

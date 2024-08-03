@@ -618,7 +618,7 @@ DASH_DURATION_SECONDS = 0.13
 DASH_LENGTH = 550
 INTERACT_DISTANCE = 200
 ELEMENT_INPUT_TIMEOUT = 1.15
-spells = Array[String](["fireball", "earthshock", "shield"])
+spells = Array[String](["fireball", "earthshock"])
 
 [node name="cameratarget" type="Marker2D" parent="."]
 

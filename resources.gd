@@ -8,14 +8,22 @@ var max_angle := 4.7
 @export var elements_left := 2:
 	set(value):
 		elements_left = value
+		if elements_left == 0:
+			current_value = 0
+		elif value < elements_left:
+			current_value = 6
 		if $Label != null:
 			$Label.text = str(value)
 @export var current_value: int = 6:
 	set(value):
-		current_value = value
-		if value < 1 and elements_left != 0:
+		if value < 1 and elements_left > 0:
 			elements_left -= 1
-			current_value = 6 + current_value
+			if elements_left > 0:
+				current_value = 6
+			else:
+				current_value = 0
+		else:
+			current_value = value
 		var temp := ((min_angle * -1) + max_angle) / 100
 		# 100 / MAX_VALUE
 		current_angle = max_angle - (17 * current_value * temp)
