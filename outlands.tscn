@@ -225,11 +225,10 @@ delete_wall2 = NodePath("../rocks2")
 
 [node name="golem" parent="switchA" instance=ExtResource("4_0wh8g")]
 position = Vector2(-86, 36)
-GOLEM_TYPE = 0
 
 [node name="golem2" parent="switchA" instance=ExtResource("4_0wh8g")]
 position = Vector2(105, -41)
-GOLEM_TYPE = 1
+GOLEM_TYPE = 0
 
 [node name="switch1" type="Polygon2D" parent="."]
 self_modulate = Color(1, 1, 1, 0)
@@ -245,6 +244,7 @@ delete_wall = NodePath("../rocks3")
 
 [node name="golem2" parent="switch2" instance=ExtResource("4_0wh8g")]
 position = Vector2(-721, -703)
+GOLEM_TYPE = 2
 
 [node name="golem4" parent="switch2" instance=ExtResource("4_0wh8g")]
 position = Vector2(-863, -612)
@@ -252,10 +252,11 @@ GOLEM_TYPE = 2
 
 [node name="golem3" parent="switch2" instance=ExtResource("4_0wh8g")]
 position = Vector2(-727, -922)
-GOLEM_TYPE = 1
+GOLEM_TYPE = 2
 
 [node name="golem5" parent="switch2" instance=ExtResource("4_0wh8g")]
 position = Vector2(-869, -831)
+GOLEM_TYPE = 0
 
 [node name="switch3" type="Polygon2D" parent="." node_paths=PackedStringArray("delete_wall")]
 self_modulate = Color(1, 1, 1, 0)
@@ -270,35 +271,35 @@ GOLEM_TYPE = 0
 
 [node name="golem2" parent="switch3" instance=ExtResource("4_0wh8g")]
 position = Vector2(351, -500)
-GOLEM_TYPE = 1
 
 [node name="golem3" parent="switch3" instance=ExtResource("4_0wh8g")]
 position = Vector2(310, -364)
+GOLEM_TYPE = 2
 
 [node name="golem4" parent="switch3" instance=ExtResource("4_0wh8g")]
 position = Vector2(512, -537)
+GOLEM_TYPE = 1
 
 [node name="golem5" parent="switch3" instance=ExtResource("4_0wh8g")]
 position = Vector2(722, -534)
+GOLEM_TYPE = 0
 
 [node name="golem6" parent="switch3" instance=ExtResource("4_0wh8g")]
 position = Vector2(650, -458)
-GOLEM_TYPE = 2
 
 [node name="golem7" parent="switch3" instance=ExtResource("4_0wh8g")]
 position = Vector2(601, -308)
-GOLEM_TYPE = 2
 
 [node name="golem8" parent="switch3" instance=ExtResource("4_0wh8g")]
 position = Vector2(730, -343)
+GOLEM_TYPE = 0
 
 [node name="golem9" parent="switch3" instance=ExtResource("4_0wh8g")]
 position = Vector2(675, -168)
-GOLEM_TYPE = 1
 
 [node name="golem10" parent="switch3" instance=ExtResource("4_0wh8g")]
 position = Vector2(904, -62)
-GOLEM_TYPE = 1
+GOLEM_TYPE = 2
 
 [node name="golem11" parent="switch3" instance=ExtResource("4_0wh8g")]
 position = Vector2(911, -240)
@@ -306,7 +307,7 @@ GOLEM_TYPE = 2
 
 [node name="golem12" parent="switch3" instance=ExtResource("4_0wh8g")]
 position = Vector2(584, -28)
-GOLEM_TYPE = 1
+GOLEM_TYPE = 2
 
 [node name="switch4" type="Polygon2D" parent="."]
 self_modulate = Color(1, 1, 1, 0)
@@ -335,11 +336,11 @@ GOLEM_TYPE = 0
 
 [node name="golem3" parent="switch7" instance=ExtResource("4_0wh8g")]
 position = Vector2(754, -1171)
-GOLEM_TYPE = 1
+GOLEM_TYPE = 0
 
 [node name="golem4" parent="switch7" instance=ExtResource("4_0wh8g")]
 position = Vector2(894, -1075)
-GOLEM_TYPE = 0
+GOLEM_TYPE = 2
 
 [node name="switch6" type="Polygon2D" parent="."]
 self_modulate = Color(1, 1, 1, 0)

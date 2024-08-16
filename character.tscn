@@ -554,12 +554,13 @@ blend_point_2/node = SubResource("AnimationNodeAnimation_c0028")
 blend_point_2/pos = Vector2(0, -1)
 blend_point_3/node = SubResource("AnimationNodeAnimation_1gqbn")
 blend_point_3/pos = Vector2(-1, 0)
-blend_mode = 1
+blend_mode = 2
+sync = true
 
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_ssebm"]
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_wixwh"]
-graph_offset = Vector2(-387.5, -23.75)
+graph_offset = Vector2(-348, 13)
 nodes/BlendSpace2D/node = SubResource("AnimationNodeBlendSpace2D_n6sfy")
 nodes/BlendSpace2D/position = Vector2(-150, 100)
 nodes/TimeScale/node = SubResource("AnimationNodeTimeScale_ssebm")
@@ -592,7 +593,7 @@ states/move/position = Vector2(355.897, 273.25)
 states/slash/node = SubResource("AnimationNodeBlendTree_wixwh")
 states/slash/position = Vector2(558.084, 72)
 transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_vjr5e"), "idle", "slash", SubResource("AnimationNodeStateMachineTransition_t02g5"), "slash", "idle", SubResource("AnimationNodeStateMachineTransition_q5pyv"), "idle", "move", SubResource("AnimationNodeStateMachineTransition_6qy4f"), "move", "idle", SubResource("AnimationNodeStateMachineTransition_de5dv"), "move", "slash", SubResource("AnimationNodeStateMachineTransition_44ng3"), "slash", "move", SubResource("AnimationNodeStateMachineTransition_8meb1")]
-graph_offset = Vector2(-16.4157, -3)
+graph_offset = Vector2(-50.4157, 15)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8ggmo"]
 size = Vector2(20, 29)

@@ -105,7 +105,6 @@ func _physics_process(delta: float) -> void:
 			
 			if currently_casting_spell_name != "":
 				spell_input = ""
-				### FIXME REMOVE!!!!!
 				Global.UI.reset_cast_indicator()
 				to_launch = Global.spells_name[currently_casting_spell_name.to_lower().replace(" ", "_")][1].instantiate()
 				to_launch.global_position = global_position
@@ -152,12 +151,12 @@ func _physics_process(delta: float) -> void:
 			
 			if Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized() != Vector2.ZERO:
 				$object_interact.target_position = Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized() * INTERACT_DISTANCE
-				if %AnimationTree.get("parameters/playback").get_current_node() != "slash":
-					%AnimationTree.get("parameters/playback").travel("move")
-					$slash_hitbox_down.monitoring = false
-					$slash_hitbox_left.monitoring = false
-					$slash_hitbox_right.monitoring = false
-					$slash_hitbox_up.monitoring = false
+				#if %AnimationTree.get("parameters/playback").get_current_node() != "slash":
+					#%AnimationTree.get("parameters/playback").travel("move")
+					#$slash_hitbox_down.monitoring = false
+					#$slash_hitbox_left.monitoring = false
+					#$slash_hitbox_right.monitoring = false
+					#$slash_hitbox_up.monitoring = false
 				%AnimationTree.set("parameters/move/BlendSpace2D/blend_position", Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized())
 				%AnimationTree.set("parameters/idle/BlendSpace2D/blend_position", Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized())
 				%AnimationTree.set("parameters/slash/BlendSpace2D/blend_position", Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized())

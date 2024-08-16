@@ -85,6 +85,8 @@ enum ACTION_STATES {
 }
 
 func _ready() -> void:
+	if Engine.is_editor_hint():
+		return
 	HP = HP
 	current_hp_sprite = $hp_sprites.get_node("health" + str(HP))
 	current_hp_sprite.visible = true
