@@ -17,10 +17,11 @@ func _ready() -> void:
 	var right_direction := direction.rotated(OFFSET_ANGLE)
 
 	# Create the projectiles
+	#NeoWonka 21:05cst 10/22/24: removed local declaration of velocity as variable. May need to place back as different local name,
+								# or change velocity var in CharcterBody2D class.
 	for i in range(3):
 		var projectile := get_child(i)
-
-		var velocity := Vector2.ZERO
+		velocity = Vector2.ZERO
 		match i:
 			0:
 				velocity = direction * PROJECTILE_SPEED
@@ -80,7 +81,7 @@ func _process(delta: float) -> void:
 					projectiles.erase(projectile)
 					projectile.queue_free()
 
-func on_hit(proj: CharacterBody2D, area: Area2D) -> void:
+func on_hit(_proj: CharacterBody2D, area: Area2D) -> void:
 	var effect := Effect.new()
 	effect.damage = DAMAGE
 	var enemy: CharacterBody2D = area.get_parent()
@@ -106,4 +107,3 @@ func _on_hitbox1_area_entered(area: Area2D) -> void:
 func _on_hitbox2_area_entered(area: Area2D) -> void:
 	on_hit($Sprite2D3, area)
 	pass
-

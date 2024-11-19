@@ -48,4 +48,3 @@ func _on_cameraswitch_body_entered(_body: Node2D) -> void:
 	Global.change_room(switch_to.name, enable, disable)
 	set_deferred("monitoring", false)
 	pass # Replace with function body.
-

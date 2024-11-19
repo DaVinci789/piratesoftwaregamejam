@@ -36,7 +36,7 @@ func activate() -> void:
 func _process(delta: float) -> void:
 	velocity = global_position.direction_to(Global.Player.global_position)
 	move_and_collide(velocity * SPEED * delta)
-
+#NeoWonka 22:07cst 10/14/2024: changed wisp value for testing purposes
 func _on_collect_body_entered(body: Node2D) -> void:
 	if body.name != "character":
 		return
@@ -44,16 +44,16 @@ func _on_collect_body_entered(body: Node2D) -> void:
 		return
 	match TYPE:
 		Elements.Earth:
-			Global.UI.get_node("magic").get_node("earth").elements_left += 1
+			Global.UI.get_node("magic").get_node("earth").elements_left += 3
 			Global.UI.get_node("magic").get_node("earth").current_value = 6
 		Elements.Air:
-			Global.UI.get_node("magic").get_node("air").elements_left += 1
+			Global.UI.get_node("magic").get_node("air").elements_left += 3
 			Global.UI.get_node("magic").get_node("air").current_value = 6
 		Elements.Fire:
-			Global.UI.get_node("magic").get_node("fire").elements_left += 1
+			Global.UI.get_node("magic").get_node("fire").elements_left += 3
 			Global.UI.get_node("magic").get_node("fire").current_value = 6
 		Elements.Water:
-			Global.UI.get_node("magic").get_node("water").elements_left += 1
+			Global.UI.get_node("magic").get_node("water").elements_left += 3
 			Global.UI.get_node("magic").get_node("water").current_value = 6
 	queue_free()
 	pass # Replace with function body.

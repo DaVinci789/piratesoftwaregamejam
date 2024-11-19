@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://util_scenes/areaswitch.gd" id="1_voemo"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6ycyu"]
-size = Vector2(280, 32)
+size = Vector2(40, 40)
 
 [node name="areaswitch" type="ColorRect"]
 offset_right = 40.0

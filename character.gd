@@ -1,7 +1,8 @@
 extends CharacterBody2D
 
 @export var SPEED := 700
-@export var BASE_HP := 5.0
+#NeoWonka 22:08 10/14/2024: Changed health for testing purposes
+@export var BASE_HP := 100
 var hp := BASE_HP:
 	set(value):
 		hp = value
@@ -11,9 +12,9 @@ var hp := BASE_HP:
 			Global.CurrentLevel._on_dungeon_exit_body_entered(null)
 			Global.UI.delete_spells()
 			
-			var listing := Global.spells_name.keys()
-			listing.shuffle()
-			for spell: String in listing.slice(0, 1):
+			#var listing := Global.spells_name.keys()
+			#listing.shuffle()
+			for spell: String in ["fireball","shield"]:
 				var spell_cost: Resource = Global.spells_name[spell][0]
 				Global.UI.load_spell(spell_cost)
 @export var CAMERA_INPUT_UPDATE := 0.1
@@ -22,7 +23,7 @@ var hp := BASE_HP:
 @export var CAMERA_TRACKING_OFFSET := 200
 @export var INTERACT_DISTANCE := 220
 @export var ELEMENT_INPUT_TIMEOUT := 0.5:
-	set(value):
+	set (value):
 		if is_inside_tree() and $element_input_timeout:
 			$element_input_timeout.wait_time = value
 @export var PUSH_STRENGTH := 70
@@ -34,6 +35,8 @@ var hp := BASE_HP:
 var move_camera_target := true
 
 @export var spells: Array[String] = []
+#NeoWonka 20:53cst 10/14/2024: Adding spell inventory for "if" statements restricting casting.
+@export var spell_inventory: Array[String] = ["fireball", "shield"]
 var spell_input := ""
 var currently_casting_spell_name := ""
 
@@ -57,14 +60,15 @@ var dash_time_elapsed := 0.0
 var slash_damage := Effect.new()
 var damage_multiplier := 1.0
 
+
 func _ready() -> void:
 	hp = BASE_HP
 	slash_damage.damage = SLASH_DAMAGE
-	$element_input_timeout.wait_time = ELEMENT_INPUT_TIMEOUT
+	#$element_input_timeout.wait_time = ELEMENT_INPUT_TIMEOUT
 	
 	#var listing := ["fireball", "earthshock", "lightning", "dancing_wisps", "shield", "waterwave"]
 	#listing.shuffle()
-	for spell: String in spells:
+	for spell: String in spell_inventory:
 		var spell_cost: Resource = Global.spells_name[spell][0]
 		Global.UI.load_spell(spell_cost)
 
@@ -87,13 +91,15 @@ func _physics_process(delta: float) -> void:
 			Global.UI.light_element_input(spell_input)
 		
 		# on Successful Spell input read
-		for spell: String in ["fireball", "earthshock", "lightning", "dancing_wisps", "shield", "waterwave"]:
+		#NeoWonka 22:40 10/14/2024: Changed spells list to the inventory array
+		for spell: String in spell_inventory:
 			var spell_res: Spell_Cost = Global.spells_name[spell][0]
 			if spell_res.cost == spell_input:
-				if Spell_Cost.to_conditional(spell_res.cost):
-					Global.UI.cursor_state = spell_res.cursor_state
-					currently_casting_spell_name = spell_res.readable_name
-					spell_input = ""
+				if spell in spell_inventory:
+					if Spell_Cost.to_conditional(spell_res.cost):
+						Global.UI.cursor_state = spell_res.cursor_state
+						currently_casting_spell_name = spell_res.readable_name
+						spell_input = ""
 				else:
 					if not $error.playing:
 						$error.play()

@@ -4,6 +4,7 @@ var cursor_state: int = Spell_Cost.CursorState.None
 var fire_cost: String
 var spell_cost: Spell_Cost
 var loaded_spells: Array[Spell_Cost] = []
+var spells_inventory: Array[String] = Character.spell_inventory
 
 func _ready() -> void:
 	Global.switch0_entered.connect(_on_switch0_entered)
@@ -177,9 +178,13 @@ func randomize_fire(exclude: String) -> String:
 			%heart1.visible = true
 			%heart2.visible = true
 	return cost
-	
+#NeoWonka 22:05 10/14/2024: Changed randomize_spell to read the spell_inventory, and reroll if that spell is already in the inventory.	
 func randomize_spell() -> Spell_Cost:
-	var spell_cost := Global.get_random_spell_cost()
+	#spell_cost := Global.get_random_spell_cost()
+	if spell_cost.readable_name in spells_inventory:
+		while spell_cost.readable_name in spells_inventory:
+			Global.get_random_spell_cost()
+			return spell_cost
 	#var tries := 5
 	#while tries > 0 and (fire_cost.begins_with(spell_cost.cost) or spell_cost in loaded_spells):
 		#spell_cost = Global.get_random_spell_cost()

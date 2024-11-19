@@ -1,6 +1,6 @@
 extends Spell
 
-@export var DAMAGE := 2
+@export var DAMAGE := 3
 @export var SPEED := 2000
 
 func _ready() -> void:

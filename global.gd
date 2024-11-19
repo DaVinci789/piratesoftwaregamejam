@@ -14,8 +14,8 @@ var WaterWheel: Node2D
 var camp_entrance: Marker2D
 var camp_camera_snap: Marker2D
 
-var spells_name := {}
-var spells_cost := {}
+@export var spells_name := {}
+@export var spells_cost := {}
 
 var time_left := 0
 var times_increased_time := 0
@@ -109,8 +109,9 @@ func change_room(to: String, enable_enemies_in: String, disable_enemies_in: Stri
 	if has_signal(to + "_entered"):
 		emit_signal(to + "_entered")
 
-
 func get_random_spell() -> PackedScene:
+	for spell: String in ["fireball", "earthshock", "lightning", "dancing_wisps", "shield", "waterwave"]:
+		var _spell_res: Spell_Cost = Global.spells_name[spell][0]
 	var keys := spells_cost.keys()
 	keys.shuffle()
 	var spells: Array = spells_cost[keys[0]]

@@ -48,9 +48,7 @@ func _on_exit_tutorial_body_entered(body: Node2D) -> void:
 	Global.UI.get_node("magic").get_node("water").current_value = 6
 	
 	Global.UI.delete_spells()
-	var listing := Global.spells_name.keys()
-	listing.shuffle()
-	for spell: String in listing.slice(0, 1):
+	for spell: String in ["fireball","shield"]:
 		var spell_cost: Resource = Global.spells_name[spell][0]
 		Global.UI.load_spell(spell_cost)
 	Global.UI.spell_cost = Global.UI.randomize_spell()

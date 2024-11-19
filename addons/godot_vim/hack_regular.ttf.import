@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://dpp5bxrjahe5b"
-path="res://.godot/imported/mago2.ttf-dd28d129e299b7ecba5681d7471a114e.fontdata"
+uid="uid://4q1f672e7ux2"
+path="res://.godot/imported/hack_regular.ttf-0fe21890026c2274f233cdc75cf86ba7.fontdata"
 
 [deps]
 
-source_file="res://assets/fonts/mago2.ttf"
-dest_files=["res://.godot/imported/mago2.ttf-dd28d129e299b7ecba5681d7471a114e.fontdata"]
+source_file="res://addons/godot_vim/hack_regular.ttf"
+dest_files=["res://.godot/imported/hack_regular.ttf-0fe21890026c2274f233cdc75cf86ba7.fontdata"]
 
 [params]
 
